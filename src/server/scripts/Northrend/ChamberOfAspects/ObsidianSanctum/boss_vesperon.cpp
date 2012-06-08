@@ -77,10 +77,10 @@ class boss_vesperon : public CreatureScript
 
                 Creature* sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
-                if (instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+                if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
                 else
-                    instance->SetData(TYPE_SHADRON_PREKILLED, TRUE); // True originally in sarth script a 1, maybe needs to be changed somewhere else
+                    instance->SetData(DATA_SHADRON_KILLED, true);
             }
 
             void EnterCombat(Unit* target)
@@ -92,8 +92,9 @@ class boss_vesperon : public CreatureScript
                 events.ScheduleEvent(EVENT_SHADOW_BREATH,20000);
                 events.ScheduleEvent(EVENT_SUMMON_ACOLYTE,30000);
 
-                if (instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
-                    DoCast(me,SPELL_POWER_OF_VESPERON); // Perhaps needs to be cast on players in the raid
+                   // This won't work here
+                // if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
+                   // DoCast(me,SPELL_POWER_OF_VESPERON); // Perhaps needs to be cast on players in the raid
             }
 
             void JustReachedHome()
@@ -152,7 +153,7 @@ class boss_vesperon : public CreatureScript
                     case EVENT_SUMMON_ACOLYTE:
                         if (Creature* acolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 50.0f))
                             if (!acolyte)
-                                if (instance->GetData(TYPE_SARTHARION_EVENT) == NOT_STARTED)
+                                if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
                                     me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolytesPos[2].GetPositionX(), AcolytesPos[2].GetPositionY(), AcolytesPos[2].GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 15000);
                                 else
                                     me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolytesPos[3].GetPositionX(), AcolytesPos[3].GetPositionY(), AcolytesPos[3].GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 15000);
@@ -191,7 +192,7 @@ class mob_acolyte_of_vesperon : public CreatureScript
                 if (vesperon)
                     vesperon->AI()->JustSummoned(me);
 
-                if (instance->GetData(TYPE_SARTHARION_EVENT) == NOT_STARTED)
+                if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
                 {
                     vesperon->AI()->Talk(SAY_VESPERON_OPEN_PORTAL);
                     //me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,999999);

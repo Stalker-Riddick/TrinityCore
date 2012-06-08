@@ -78,12 +78,12 @@ class boss_tenebron : public CreatureScript
 
                 Creature* sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
-                if (instance->GetData(TYPE_SARTHARION_EVENT == IN_PROGRESS))
+                if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
                     DoCast(sartharion, SPELL_TWILIGHT_REVENGE);
                 }
                 else
-                    instance->SetData(TYPE_TENEBRON_PREKILLED, TRUE);
+                    instance->SetData(DATA_TENEBRON_KILLED, true);
 
                 // Despawn all eggs ?
             }
@@ -96,8 +96,9 @@ class boss_tenebron : public CreatureScript
                 events.ScheduleEvent(EVENT_SHADOW_BREATH, 20000);
                 events.ScheduleEvent(EVENT_HATCH_EGGS, 30000);
 
-                if (instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
-                    DoCast(me,SPELL_POWER_OF_TENEBRON); // Perhaps needs to be cast on players in the raid
+                   // This won't work here
+                // if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
+                    // DoCast(me,SPELL_POWER_OF_TENEBRON); // Perhaps needs to be cast on players in the raid
             }
 
             void JustReachedHome()

@@ -25,10 +25,10 @@
 
 enum DataTypes
 {
-    TYPE_SARTHARION_EVENT             = 1,
-    TYPE_TENEBRON_PREKILLED           = 2,
-    TYPE_SHADRON_PREKILLED            = 3,
-    TYPE_VESPERON_PREKILLED           = 4,
+    DATA_SARTHARION_EVENT             = 1,
+    DATA_TENEBRON_KILLED              = 2,
+    DATA_SHADRON_KILLED               = 3,
+    DATA_VESPERON_KILLED              = 4,
     DATA_SARTHARION                   = 5,
     DATA_TENEBRON                     = 6,
     DATA_SHADRON                      = 7,

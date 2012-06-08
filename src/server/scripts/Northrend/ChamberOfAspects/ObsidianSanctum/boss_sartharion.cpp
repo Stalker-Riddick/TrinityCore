@@ -297,7 +297,7 @@ public:
                         pTenebron->GetMotionMaster()->MoveTargetedHome();
                     }else
                     {
-                        if (instance->GetData(TYPE_TENEBRON_PREKILLED) == false)
+                        if (instance->GetData(DATA_TENEBRON_KILLED) == false)
                         {
                             pTenebron->Respawn();
                             pTenebron->GetMotionMaster()->MoveTargetedHome();
@@ -315,7 +315,7 @@ public:
                         pShadron->GetMotionMaster()->MoveTargetedHome();
                     }else
                     {
-                        if (instance->GetData(TYPE_SHADRON_PREKILLED) == false)
+                        if (instance->GetData(DATA_SHADRON_KILLED) == false)
                         {
                             pShadron->Respawn();
                             pShadron->GetMotionMaster()->MoveTargetedHome();
@@ -333,7 +333,7 @@ public:
                         pVesperon->GetMotionMaster()->MoveTargetedHome();
                     }else
                     {
-                        if (instance->GetData(TYPE_VESPERON_PREKILLED) == false)
+                        if (instance->GetData(DATA_VESPERON_KILLED) == false)
                         {
                             pVesperon->Respawn();
                             pVesperon->GetMotionMaster()->MoveTargetedHome();
@@ -347,7 +347,7 @@ public:
         void JustReachedHome()
         {
             if (instance)
-                instance->SetData(TYPE_SARTHARION_EVENT, NOT_STARTED);
+                instance->SetData(DATA_SARTHARION_EVENT, NOT_STARTED);
         }
 
         void EnterCombat(Unit* /*who*/)
@@ -357,7 +357,7 @@ public:
 
             if (instance)
             {
-                instance->SetData(TYPE_SARTHARION_EVENT, IN_PROGRESS);
+                instance->SetData(DATA_SARTHARION_EVENT, IN_PROGRESS);
                 FetchDragons();
             }
         }
@@ -378,7 +378,7 @@ public:
                 if (pVesperon && pVesperon->isAlive())
                     pVesperon->DisappearAndDie();
 
-                instance->SetData(TYPE_SARTHARION_EVENT, DONE);
+                instance->SetData(DATA_SARTHARION_EVENT, DONE);
             }
         }
 
@@ -772,7 +772,7 @@ struct dummy_dragonAI : public ScriptedAI
 //        debug_log("dummy_dragonAI: %s reached point %u", me->GetName(), uiPointId);
 
         //if healers messed up the raid and we was already initialized
-        if (instance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+        if (instance->GetData(DATA_SARTHARION_EVENT) != IN_PROGRESS)
         {
             EnterEvadeMode();
             return;
@@ -845,7 +845,7 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_TENEBRON:
             {
                 iTextId = WHISPER_HATCH_EGGS;
-                if (instance && !instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+                if (instance && !instance->GetData(DATA_SARTHARION_EVENT) == IN_PROGRESS)
                 {
                     for (uint32 i = 0; i < 6; ++i)
                         me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggs[i].x, TwilightEggs[i].y, TwilightEggs[i].z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
@@ -860,7 +860,7 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_SHADRON:
             {
                 iTextId = WHISPER_OPEN_PORTAL;
-                if (instance && !instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+                if (instance && !instance->GetData(DATA_SARTHARION_EVENT) == IN_PROGRESS)
                     me->SummonCreature(NPC_ACOLYTE_OF_SHADRON, AcolyteofShadron.x, AcolyteofShadron.y, AcolyteofShadron.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 28000);
                 else
                     me->SummonCreature(NPC_ACOLYTE_OF_SHADRON, AcolyteofShadron2.x, AcolyteofShadron2.y, AcolyteofShadron2.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 28000);
@@ -870,7 +870,7 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_VESPERON:
             {
                 iTextId = WHISPER_OPEN_PORTAL;
-                if (instance && !instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+                if (instance && !instance->GetData(DATA_SARTHARION_EVENT) == IN_PROGRESS)
                 {
                     if (Creature* Acolyte = me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolyteofVesperon.x, AcolyteofVesperon.y, AcolyteofVesperon.z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000))
                     {
@@ -917,22 +917,22 @@ struct dummy_dragonAI : public ScriptedAI
             case NPC_TENEBRON:
                 iTextId = SAY_TENEBRON_DEATH;
                 uiSpellId = SPELL_POWER_OF_TENEBRON;
-                if (instance && instance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
-                    instance->SetData(TYPE_TENEBRON_PREKILLED, 1);
+                if (instance && instance->GetData(DATA_SARTHARION_EVENT) != IN_PROGRESS)
+                    instance->SetData(DATA_TENEBRON_KILLED, 1);
                 break;
             case NPC_SHADRON:
                 iTextId = SAY_SHADRON_DEATH;
                 uiSpellId = SPELL_POWER_OF_SHADRON;
-                if (instance && instance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
-                    instance->SetData(TYPE_SHADRON_PREKILLED, 1);
+                if (instance && instance->GetData(DATA_SARTHARION_EVENT) != IN_PROGRESS)
+                    instance->SetData(DATA_SHADRON_KILLED, 1);
                 if (Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_SHADRON, 100.0f))
                     pAcolyte->Kill(pAcolyte);
                 break;
             case NPC_VESPERON:
                 iTextId = SAY_VESPERON_DEATH;
                 uiSpellId = SPELL_POWER_OF_VESPERON;
-                if (instance && instance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
-                    instance->SetData(TYPE_VESPERON_PREKILLED, 1);
+                if (instance && instance->GetData(DATA_SARTHARION_EVENT) != IN_PROGRESS)
+                    instance->SetData(DATA_VESPERON_KILLED, 1);
                 if (Creature* pAcolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 100.0f))
                     pAcolyte->Kill(pAcolyte);
                 break;
@@ -947,7 +947,7 @@ struct dummy_dragonAI : public ScriptedAI
             instance->DoRemoveAurasDueToSpellOnPlayers(uiSpellId);
 
             // not if solo mini-boss fight
-            if (instance->GetData(TYPE_SARTHARION_EVENT) != IN_PROGRESS)
+            if (instance->GetData(DATA_SARTHARION_EVENT) != IN_PROGRESS)
                 return;
 
             // Twilight Revenge to main boss
@@ -1298,7 +1298,7 @@ public:
             {
                 Creature* target = NULL;
                 //if not solo figth, buff main boss, else place debuff on mini-boss. both spells TARGET_SCRIPT
-                if (instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+                if (instance->GetData(DATA_SARTHARION_EVENT) == IN_PROGRESS)
                 {
                     target = Unit::GetCreature((*me), instance->GetData64(DATA_SARTHARION));
                     if (target)
@@ -1512,7 +1512,7 @@ public:
         {
             me->RemoveAllAuras();
 
-            if (!instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
+            if (!instance->GetData(DATA_SARTHARION_EVENT) == IN_PROGRESS)
                 me->SummonCreature(NPC_TWILIGHT_WHELP, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
             else
                 me->SummonCreature(NPC_SHARTHARION_TWILIGHT_WHELP, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);

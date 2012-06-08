@@ -129,25 +129,25 @@ public:
 
         void SetData(uint32 type, uint32 data)
         {
-            if (type == TYPE_SARTHARION_EVENT)
+            if (type == DATA_SARTHARION_EVENT)
                 Encounter[0] = data;
-            else if (type == TYPE_TENEBRON_PREKILLED)
+            else if (type == DATA_TENEBRON_KILLED)
                 TenebronKilled = true;
-            else if (type == TYPE_SHADRON_PREKILLED)
+            else if (type == DATA_SHADRON_KILLED)
                 ShadronKilled = true;
-            else if (type == TYPE_VESPERON_PREKILLED)
+            else if (type == DATA_VESPERON_KILLED)
                 VesperonKilled = true;
         }
 
         uint32 GetData(uint32 type)
         {
-            if (type == TYPE_SARTHARION_EVENT)
+            if (type == DATA_SARTHARION_EVENT)
                 return Encounter[0];
-            else if (type == TYPE_TENEBRON_PREKILLED)
+            else if (type == DATA_TENEBRON_KILLED)
                 return TenebronKilled;
-            else if (type == TYPE_SHADRON_PREKILLED)
+            else if (type == DATA_SHADRON_KILLED)
                 return ShadronKilled;
-            else if (type == TYPE_VESPERON_PREKILLED)
+            else if (type == DATA_VESPERON_KILLED)
                 return VesperonKilled;
 
             return 0;
