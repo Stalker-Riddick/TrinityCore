@@ -75,14 +75,14 @@ enum eEnums
 
     //Vesperon
     //In portal is a disciple, when disciple killed remove Power_of_vesperon, portal open multiple times
-    NPC_ACOLYTE_OF_VESPERON                     = 31219,    // Acolyte of Vesperon
+    //NPC_ACOLYTE_OF_VESPERON                     = 31219,    // Acolyte of Vesperon
     SPELL_POWER_OF_VESPERON                     = 61251,    // Vesperon's presence decreases the maximum health of all enemies by 25%.
     SPELL_TWILIGHT_TORMENT_VESP                 = 57948,    // (Shadow only) trigger 57935 then 57988
     SPELL_TWILIGHT_TORMENT_VESP_ACO             = 58853,    // (Fire and Shadow) trigger 58835 then 57988
 
     //Shadron
     //In portal is a disciple, when disciple killed remove Power_of_vesperon, portal open multiple times
-    NPC_ACOLYTE_OF_SHADRON                      = 31218,    // Acolyte of Shadron
+    //NPC_ACOLYTE_OF_SHADRON                      = 31218,    // Acolyte of Shadron
     SPELL_POWER_OF_SHADRON                      = 58105,    // Shadron's presence increases Fire damage taken by all enemies by 100%.
     SPELL_GIFT_OF_TWILIGTH_SHA                  = 57835,    // TARGET_SCRIPT shadron
     SPELL_GIFT_OF_TWILIGTH_SAR                  = 58766,    // TARGET_SCRIPT sartharion
@@ -101,11 +101,11 @@ enum eEnums
     SPELL_HATCH_EGGS_EFFECT_H                   = 59190,
     SPELL_HATCH_EGGS_EFFECT                     = 58685,
     NPC_TWILIHT_WHELP                           = 31214,
-    NPC_TWILIGHT_EGG                            = 30882,
-    NPC_SARTHARION_TWILIGHT_EGG                 = 31204,
+    //NPC_TWILIGHT_EGG                            = 30882,
+    //NPC_SARTHARION_TWILIGHT_EGG                 = 31204,
 
     //Whelps
-    NPC_TWILIGHT_WHELP                          = 30890,
+    //NPC_TWILIGHT_WHELP                          = 30890,
     NPC_SHARTHARION_TWILIGHT_WHELP              = 31214,
     SPELL_FADE_ARMOR                            = 60708,    // Reduces the armor of an enemy by 1500 for 15s
 

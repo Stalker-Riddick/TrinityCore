@@ -38,34 +38,36 @@ public:
     {
         instance_obsidian_sanctum_InstanceMapScript(Map* map) : InstanceScript(map) {}
 
-        uint32 m_auiEncounter[MAX_ENCOUNTER];
-        uint64 m_uiSartharionGUID;
-        uint64 m_uiTenebronGUID;
-        uint64 m_uiShadronGUID;
-        uint64 m_uiVesperonGUID;
+        uint32 Encounter[MAX_ENCOUNTER];
+        uint64 SartharionGUID;
+        uint64 TenebronGUID;
+        uint64 ShadronGUID;
+        uint64 VesperonGUID;
+        uint64 TwilightPortalGUID;
 
-        bool m_bTenebronKilled;
-        bool m_bShadronKilled;
-        bool m_bVesperonKilled;
+        bool TenebronKilled;
+        bool ShadronKilled;
+        bool VesperonKilled;
 
         void Initialize()
         {
-            memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
+            memset(&Encounter, 0, sizeof(Encounter));
 
-            m_uiSartharionGUID = 0;
-            m_uiTenebronGUID   = 0;
-            m_uiShadronGUID    = 0;
-            m_uiVesperonGUID   = 0;
+            SartharionGUID      = 0;
+            TenebronGUID        = 0;
+            ShadronGUID         = 0;
+            VesperonGUID        = 0;
+            TwilightPortalGUID  = 0;
 
-            m_bTenebronKilled = false;
-            m_bShadronKilled = false;
-            m_bVesperonKilled = false;
+            TenebronKilled = false;
+            ShadronKilled = false;
+            VesperonKilled = false;
         }
 
         bool IsEncounterInProgress() const
         {
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (m_auiEncounter[i] == IN_PROGRESS)
+                if (Encounter[i] == IN_PROGRESS)
                     return true;
 
             return false;
@@ -76,63 +78,95 @@ public:
             switch (creature->GetEntry())
             {
                 case NPC_SARTHARION:
-                    m_uiSartharionGUID = creature->GetGUID();
+                    SartharionGUID = creature->GetGUID();
                     break;
                 //three dragons below set to active state once created.
                 //we must expect bigger raid to encounter main boss, and then three dragons must be active due to grid differences
                 case NPC_TENEBRON:
-                    m_uiTenebronGUID = creature->GetGUID();
+                    TenebronGUID = creature->GetGUID();
                     creature->setActive(true);
                     break;
                 case NPC_SHADRON:
-                    m_uiShadronGUID = creature->GetGUID();
+                    ShadronGUID = creature->GetGUID();
                     creature->setActive(true);
                     break;
                 case NPC_VESPERON:
-                    m_uiVesperonGUID = creature->GetGUID();
+                    VesperonGUID = creature->GetGUID();
                     creature->setActive(true);
                     break;
             }
         }
 
-        void SetData(uint32 uiType, uint32 uiData)
+        void OnGameObjectCreate(GameObject* go)
         {
-            if (uiType == TYPE_SARTHARION_EVENT)
-                m_auiEncounter[0] = uiData;
-            else if (uiType == TYPE_TENEBRON_PREKILLED)
-                m_bTenebronKilled = true;
-            else if (uiType == TYPE_SHADRON_PREKILLED)
-                m_bShadronKilled = true;
-            else if (uiType == TYPE_VESPERON_PREKILLED)
-                m_bVesperonKilled = true;
+            switch (go->GetEntry())
+            {
+                case GO_TWILIGHT_PORTAL:
+                    TwilightPortalGUID = go->GetGUID();
+                    break;
+            }
         }
 
-        uint32 GetData(uint32 uiType)
+        bool SetBossState(uint32 type, EncounterState state)
         {
-            if (uiType == TYPE_SARTHARION_EVENT)
-                return m_auiEncounter[0];
-            else if (uiType == TYPE_TENEBRON_PREKILLED)
-                return m_bTenebronKilled;
-            else if (uiType == TYPE_SHADRON_PREKILLED)
-                return m_bShadronKilled;
-            else if (uiType == TYPE_VESPERON_PREKILLED)
-                return m_bVesperonKilled;
+            if (!InstanceScript::SetBossState(type, state))
+                return false;
+
+            switch (type)
+            {
+            case DATA_SARTHARION:
+                break;
+            case DATA_SHADRON:
+                break;
+            case DATA_VESPERON:
+                break;
+            case DATA_TENEBRON:
+                break;
+            }
+
+            return true;
+        }
+
+        void SetData(uint32 type, uint32 data)
+        {
+            if (type == TYPE_SARTHARION_EVENT)
+                Encounter[0] = data;
+            else if (type == TYPE_TENEBRON_PREKILLED)
+                TenebronKilled = true;
+            else if (type == TYPE_SHADRON_PREKILLED)
+                ShadronKilled = true;
+            else if (type == TYPE_VESPERON_PREKILLED)
+                VesperonKilled = true;
+        }
+
+        uint32 GetData(uint32 type)
+        {
+            if (type == TYPE_SARTHARION_EVENT)
+                return Encounter[0];
+            else if (type == TYPE_TENEBRON_PREKILLED)
+                return TenebronKilled;
+            else if (type == TYPE_SHADRON_PREKILLED)
+                return ShadronKilled;
+            else if (type == TYPE_VESPERON_PREKILLED)
+                return VesperonKilled;
 
             return 0;
         }
 
-        uint64 GetData64(uint32 uiData)
+        uint64 GetData64(uint32 data)
         {
-            switch (uiData)
+            switch (data)
             {
                 case DATA_SARTHARION:
-                    return m_uiSartharionGUID;
+                    return SartharionGUID;
                 case DATA_TENEBRON:
-                    return m_uiTenebronGUID;
+                    return TenebronGUID;
                 case DATA_SHADRON:
-                    return m_uiShadronGUID;
+                    return ShadronGUID;
                 case DATA_VESPERON:
-                    return m_uiVesperonGUID;
+                    return VesperonGUID;
+                case DATA_TWILIGHT_PORTAL:
+                    return TwilightPortalGUID;
             }
             return 0;
         }
