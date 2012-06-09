@@ -50,7 +50,9 @@ enum Events
 {
     EVENT_SHADOW_FISSURE                        = 1,
     EVENT_SHADOW_BREATH                         = 2,
-    EVENT_HATCH_EGGS                            = 3,
+    EVENT_SPAWN_EGGS                            = 3,
+    EVENT_OPEN_PORTAL                           = 4,
+    EVENT_HATCH_EGGS                            = 5,
 };
 
 class boss_tenebron : public CreatureScript
@@ -85,6 +87,8 @@ class boss_tenebron : public CreatureScript
                 else
                     instance->SetData(DATA_TENEBRON_KILLED, true);
 
+                instance->SetBossState(DATA_TENEBRON, DONE);
+
                 // Despawn all eggs ?
             }
 
@@ -96,6 +100,8 @@ class boss_tenebron : public CreatureScript
                 events.ScheduleEvent(EVENT_SHADOW_BREATH, 20000);
                 events.ScheduleEvent(EVENT_HATCH_EGGS, 30000);
 
+                instance->SetBossState(DATA_TENEBRON, IN_PROGRESS);
+
                    // This won't work here
                 // if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
                     // DoCast(me,SPELL_POWER_OF_TENEBRON); // Perhaps needs to be cast on players in the raid
@@ -104,6 +110,8 @@ class boss_tenebron : public CreatureScript
             void JustReachedHome()
             {
                 _JustReachedHome();
+
+                instance->SetBossState(DATA_TENEBRON, FAIL);
             }
 
             void EnterEvadeMode()
@@ -139,10 +147,14 @@ class boss_tenebron : public CreatureScript
                         IsHeroic() ? DoCast(SPELL_SHADOW_FISSURE_H) : DoCast(SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
+                    case EVENT_SPAWN_EGGS:
+                        // Spawn eggs in their location
+                        break;
+                    case EVENT_OPEN_PORTAL:
+                        // Open  the portal to destroy eggs
+                        break;
                     case EVENT_HATCH_EGGS:
-                        //Spawn eggs ? Should they be spawned in the DB or via script ?
-                        // hatch eggs via a spell or just morph eggs in dragons or just despawn eggs and spawn dragons ?
-                        // needs more research... :(
+                        // Hatch remaining eggs
                         break;
                     }
                 }

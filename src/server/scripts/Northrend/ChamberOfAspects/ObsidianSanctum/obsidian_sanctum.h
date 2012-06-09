@@ -25,15 +25,14 @@
 
 enum DataTypes
 {
-    DATA_SARTHARION_EVENT             = 1,
-    DATA_TENEBRON_KILLED              = 2,
-    DATA_SHADRON_KILLED               = 3,
-    DATA_VESPERON_KILLED              = 4,
-    DATA_SARTHARION                   = 5,
-    DATA_TENEBRON                     = 6,
-    DATA_SHADRON                      = 7,
-    DATA_VESPERON                     = 8,
-    DATA_TWILIGHT_PORTAL              = 9,
+    DATA_TENEBRON_KILLED              = 1,
+    DATA_SHADRON_KILLED               = 2,
+    DATA_VESPERON_KILLED              = 3,
+    DATA_SARTHARION                   = 4,
+    DATA_TENEBRON                     = 5,
+    DATA_SHADRON                      = 6,
+    DATA_VESPERON                     = 7,
+    DATA_TWILIGHT_PORTAL              = 8,
 
 };
 
@@ -63,6 +62,25 @@ const Position AcolytesPos[]=
     {3246.57f, 551.263f, 58.6164f}, // 1 - Shadron Acolyte location if Sartharion is engaged.
     {3145.68f, 520.71f, 89.7f},     // 2 - Vesperon Acolyte location if Sartharion is not engaged.
     {3246.57f, 551.263f, 58.6164f}, // 3 - Vesperon Acolyte location if Sartharion is engaged.
+};
+
+const Position TwilightEggs[] =
+{
+    {3219.28f, 669.121f, 88.5549f},
+    {3221.55f, 682.852f, 90.5361f},
+    {3239.77f, 685.94f, 90.3168f},
+    {3250.33f, 669.749f, 88.7637f},
+    {3246.6f, 642.365f, 84.8752f},
+    {3233.68f, 653.117f, 85.7051f}
+};
+const Position TwilightEggsSarth[] =
+{
+    {3252.73f, 515.762f, 58.5501f},
+    {3256.56f, 521.119f, 58.6061f},
+    {3255.63f, 527.513f, 58.7568f},
+    {3264.90f, 525.865f, 58.6436f},
+    {3264.26f, 516.364f, 58.8011f},
+    {3257.54f, 502.285f, 58.2077f}
 };
 
 //const Position PortalPos[]=

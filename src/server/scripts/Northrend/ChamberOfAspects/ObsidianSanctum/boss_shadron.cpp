@@ -81,6 +81,8 @@ class boss_shadron : public CreatureScript
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
                 else
                     instance->SetData(DATA_SHADRON_KILLED, true);
+
+                instance->SetBossState(DATA_SHADRON, DONE);
             }
 
             void EnterCombat(Unit* target)
@@ -92,6 +94,8 @@ class boss_shadron : public CreatureScript
                 events.ScheduleEvent(EVENT_SHADOW_BREATH, 20000);
                 events.ScheduleEvent(EVENT_SUMMON_ACOLYTE, 60000);
 
+                instance->SetBossState(DATA_SHADRON, IN_PROGRESS);
+
                 // This won't work here
                 // if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                    // DoCast(me,SPELL_POWER_OF_SHADRON); // Perhaps needs to be cast on players in the raid
@@ -100,6 +104,8 @@ class boss_shadron : public CreatureScript
             void JustReachedHome()
             {
                 _JustReachedHome();
+
+                instance->SetBossState(DATA_SHADRON, FAIL);
             }
 
             void EnterEvadeMode()

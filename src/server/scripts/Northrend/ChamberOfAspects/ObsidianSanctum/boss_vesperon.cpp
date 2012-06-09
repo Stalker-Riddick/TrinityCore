@@ -80,7 +80,9 @@ class boss_vesperon : public CreatureScript
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
                 else
-                    instance->SetData(DATA_SHADRON_KILLED, true);
+                    instance->SetData(DATA_VESPERON_KILLED, true);
+
+                instance->SetBossState(DATA_VESPERON, DONE);
             }
 
             void EnterCombat(Unit* target)
@@ -92,6 +94,8 @@ class boss_vesperon : public CreatureScript
                 events.ScheduleEvent(EVENT_SHADOW_BREATH,20000);
                 events.ScheduleEvent(EVENT_SUMMON_ACOLYTE,30000);
 
+                instance->SetBossState(DATA_VESPERON, IN_PROGRESS);
+
                    // This won't work here
                 // if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
                    // DoCast(me,SPELL_POWER_OF_VESPERON); // Perhaps needs to be cast on players in the raid
@@ -100,6 +104,8 @@ class boss_vesperon : public CreatureScript
             void JustReachedHome()
             {
                 _JustReachedHome();
+
+                instance->SetBossState(DATA_VESPERON, FAIL);
             }
 
             void EnterEvadeMode()
