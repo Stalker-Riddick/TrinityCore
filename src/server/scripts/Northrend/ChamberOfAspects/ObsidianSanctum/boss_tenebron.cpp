@@ -83,13 +83,12 @@ class boss_tenebron : public CreatureScript
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
                     DoCast(sartharion, SPELL_TWILIGHT_REVENGE);
+                    instance->SetBossState(DATA_TENEBRON, SPECIAL);
                 }
                 else
-                    instance->SetData(DATA_TENEBRON_KILLED, true);
+                    instance->SetBossState(DATA_TENEBRON, DONE);
 
-                instance->SetBossState(DATA_TENEBRON, DONE);
-
-                // Despawn all eggs ?
+                // Despawn eggs, get guids through the instance OnGameObjectCreate
             }
 
             void EnterCombat(Unit* target)
@@ -148,13 +147,19 @@ class boss_tenebron : public CreatureScript
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SPAWN_EGGS:
-                        // Spawn eggs in their location
+                        if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
+                            for (uint32 i; i < 6; ++i)
+                                me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggs[i].GetPositionX(), TwilightEggs[i].GetPositionY(), TwilightEggs[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
+                        else
+                            for (uint32 i; i < 6; ++i)
+                                me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggsSarth[i].GetPositionX(), TwilightEggsSarth[i].GetPositionY(), TwilightEggsSarth[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                         break;
                     case EVENT_OPEN_PORTAL:
-                        // Open  the portal to destroy eggs
+                       // me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,30000);
                         break;
                     case EVENT_HATCH_EGGS:
                         // Hatch remaining eggs
+                        // Whelps always spawn in the normal realm right ?
                         break;
                     }
                 }

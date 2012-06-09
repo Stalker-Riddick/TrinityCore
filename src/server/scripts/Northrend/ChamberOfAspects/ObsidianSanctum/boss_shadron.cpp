@@ -78,11 +78,12 @@ class boss_shadron : public CreatureScript
                 Creature* sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
+                {
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
+                    instance->SetBossState(DATA_SHADRON, SPECIAL);
+                }
                 else
-                    instance->SetData(DATA_SHADRON_KILLED, true);
-
-                instance->SetBossState(DATA_SHADRON, DONE);
+                    instance->SetBossState(DATA_SHADRON, DONE);
             }
 
             void EnterCombat(Unit* target)

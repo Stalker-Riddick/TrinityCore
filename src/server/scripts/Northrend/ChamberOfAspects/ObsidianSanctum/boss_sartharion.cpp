@@ -830,12 +830,12 @@ struct dummy_dragonAI : public ScriptedAI
                 iTextId = WHISPER_HATCH_EGGS;
                 if (instance && !instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
-                    for (uint32 i = 0; i < 6; ++i)
+                   // for (uint32 i = 0; i < 6; ++i)
                      //   me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggs[i].x, TwilightEggs[i].y, TwilightEggs[i].z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                 }
                 else
                 {
-                    for (uint32 i = 0; i < 6; ++i)
+                   // for (uint32 i = 0; i < 6; ++i)
                      //  me->SummonCreature(NPC_SARTHARION_TWILIGHT_EGG, TwilightEggsSarth[i].x, TwilightEggsSarth[i].y, TwilightEggsSarth[i].z, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                 }
                 break;

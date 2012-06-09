@@ -127,28 +127,6 @@ public:
             return true;
         }
 
-        void SetData(uint32 type, uint32 data)
-        {
-            if (type == DATA_TENEBRON_KILLED)
-                TenebronKilled = true;
-            else if (type == DATA_SHADRON_KILLED)
-                ShadronKilled = true;
-            else if (type == DATA_VESPERON_KILLED)
-                VesperonKilled = true;
-        }
-
-        uint32 GetData(uint32 type)
-        {
-            if (type == DATA_TENEBRON_KILLED)
-                return TenebronKilled;
-            else if (type == DATA_SHADRON_KILLED)
-                return ShadronKilled;
-            else if (type == DATA_VESPERON_KILLED)
-                return VesperonKilled;
-
-            return 0;
-        }
-
         uint64 GetData64(uint32 data)
         {
             switch (data)
