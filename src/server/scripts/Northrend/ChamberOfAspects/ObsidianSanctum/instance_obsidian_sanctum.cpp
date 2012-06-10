@@ -15,137 +15,117 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScriptPCH.h"
 #include "obsidian_sanctum.h"
-
-#define MAX_ENCOUNTER     1
-
-/* Obsidian Sanctum encounters:
-0 - Sartharion
-*/
 
 class instance_obsidian_sanctum : public InstanceMapScript
 {
-public:
-    instance_obsidian_sanctum() : InstanceMapScript("instance_obsidian_sanctum", 615) { }
+    public:
+        instance_obsidian_sanctum() : InstanceMapScript("instance_obsidian_sanctum", 615) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* map) const
-    {
-        return new instance_obsidian_sanctum_InstanceMapScript(map);
-    }
-
-    struct instance_obsidian_sanctum_InstanceMapScript : public InstanceScript
-    {
-        instance_obsidian_sanctum_InstanceMapScript(Map* map) : InstanceScript(map) {}
-
-        uint32 Encounter[MAX_ENCOUNTER];
-        uint64 SartharionGUID;
-        uint64 TenebronGUID;
-        uint64 ShadronGUID;
-        uint64 VesperonGUID;
-        uint64 TwilightPortalGUID;
-
-        bool TenebronKilled;
-        bool ShadronKilled;
-        bool VesperonKilled;
-
-        void Initialize()
+        struct instance_obsidian_sanctum_InstanceMapScript : public InstanceScript
         {
-            memset(&Encounter, 0, sizeof(Encounter));
-
-            SartharionGUID      = 0;
-            TenebronGUID        = 0;
-            ShadronGUID         = 0;
-            VesperonGUID        = 0;
-            TwilightPortalGUID  = 0;
-
-            TenebronKilled = false;
-            ShadronKilled = false;
-            VesperonKilled = false;
-        }
-
-        bool IsEncounterInProgress() const
-        {
-            for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
-                if (Encounter[i] == IN_PROGRESS)
-                    return true;
-
-            return false;
-        }
-
-        void OnCreatureCreate(Creature* creature)
-        {
-            switch (creature->GetEntry())
+            instance_obsidian_sanctum_InstanceMapScript(Map* map) : InstanceScript(map)
             {
-                case NPC_SARTHARION:
-                    SartharionGUID = creature->GetGUID();
-                    break;
-                //three dragons below set to active state once created.
-                //we must expect bigger raid to encounter main boss, and then three dragons must be active due to grid differences
-                case NPC_TENEBRON:
-                    TenebronGUID = creature->GetGUID();
-                    creature->setActive(true);
-                    break;
-                case NPC_SHADRON:
-                    ShadronGUID = creature->GetGUID();
-                    creature->setActive(true);
-                    break;
-                case NPC_VESPERON:
-                    VesperonGUID = creature->GetGUID();
-                    creature->setActive(true);
-                    break;
-            }
-        }
-
-        void OnGameObjectCreate(GameObject* go)
-        {
-            switch (go->GetEntry())
-            {
-                case GO_TWILIGHT_PORTAL:
-                    TwilightPortalGUID = go->GetGUID();
-                    break;
-            }
-        }
-
-        bool SetBossState(uint32 type, EncounterState state)
-        {
-            if (!InstanceScript::SetBossState(type, state))
-                return false;
-
-            switch (type)
-            {
-            case DATA_SARTHARION:
-                break;
-            case DATA_SHADRON:
-                break;
-            case DATA_VESPERON:
-                break;
-            case DATA_TENEBRON:
-                break;
+                SartharionGUID      = 0;
+                TenebronGUID        = 0;
+                ShadronGUID         = 0;
+                VesperonGUID        = 0;
+                TwilightPortalGUID  = 0;
             }
 
-            return true;
-        }
-
-        uint64 GetData64(uint32 data)
-        {
-            switch (data)
+            void OnCreatureCreate(Creature* creature)
             {
-                case DATA_SARTHARION:
-                    return SartharionGUID;
-                case DATA_TENEBRON:
-                    return TenebronGUID;
-                case DATA_SHADRON:
-                    return ShadronGUID;
-                case DATA_VESPERON:
-                    return VesperonGUID;
-                case DATA_TWILIGHT_PORTAL:
-                    return TwilightPortalGUID;
+                switch (creature->GetEntry())
+                {
+                    case NPC_SARTHARION:
+                        SartharionGUID = creature->GetGUID();
+                        break;
+                    //three dragons below set to active state once created.
+                    //we must expect bigger raid to encounter main boss, and then three dragons must be active due to grid differences
+                    case NPC_TENEBRON:
+                        TenebronGUID = creature->GetGUID();
+                        creature->setActive(true);
+                        break;
+                    case NPC_SHADRON:
+                        ShadronGUID = creature->GetGUID();
+                        creature->setActive(true);
+                        break;
+                    case NPC_VESPERON:
+                        VesperonGUID = creature->GetGUID();
+                        creature->setActive(true);
+                        break;
+                    default:
+                        break;
+                }
             }
-            return 0;
-        }
-    };
 
+            void OnGameObjectCreate(GameObject* go)
+            {
+                switch (go->GetEntry())
+                {
+                    case GO_TWILIGHT_PORTAL:
+                        TwilightPortalGUID = go->GetGUID();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            bool SetBossState(uint32 type, EncounterState state)
+            {
+                if (!InstanceScript::SetBossState(type, state))
+                    return false;
+
+                switch (type)
+                {
+                    case DATA_SARTHARION:
+                        break;
+                    case DATA_SHADRON:
+                        break;
+                    case DATA_VESPERON:
+                        break;
+                    case DATA_TENEBRON:
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+
+            uint64 GetData64(uint32 data)
+            {
+                switch (data)
+                {
+                    case DATA_SARTHARION:
+                        return SartharionGUID;
+                    case DATA_TENEBRON:
+                        return TenebronGUID;
+                    case DATA_SHADRON:
+                        return ShadronGUID;
+                    case DATA_VESPERON:
+                        return VesperonGUID;
+                    case DATA_TWILIGHT_PORTAL:
+                       return TwilightPortalGUID;
+                    default:
+                        break;
+                }
+
+                return 0;
+            }
+
+        protected:
+            uint64 SartharionGUID;
+            uint64 TenebronGUID;
+            uint64 ShadronGUID;
+            uint64 VesperonGUID;
+            uint64 TwilightPortalGUID;
+        };
+
+        InstanceScript* GetInstanceScript(InstanceMap* map) const
+        {
+            return new instance_obsidian_sanctum_InstanceMapScript(map);
+        }
 };
 
 void AddSC_instance_obsidian_sanctum()
