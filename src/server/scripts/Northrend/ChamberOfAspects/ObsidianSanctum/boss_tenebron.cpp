@@ -70,7 +70,14 @@ class boss_tenebron : public CreatureScript
 
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT);
 
-                // Despawn all eggs perhaps ?
+                std::list<Creature*> EggsList;
+                me->GetCreatureListWithEntryInGrid(EggsList, NPC_TWILIGHT_EGG, 100.0f);
+                me->GetCreatureListWithEntryInGrid(EggsList, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
+                if (!EggsList.empty())
+                    for (std::list<Creature*>::const_iterator itr = EggsList.begin(); itr != EggsList.end(); ++itr)
+                        if (Creature* eggs = *itr)
+                            eggs->DespawnOrUnsummon();
+
             }
 
             void JustDied(Unit* /*killer*/)
@@ -88,7 +95,12 @@ class boss_tenebron : public CreatureScript
                 else
                     instance->SetBossState(DATA_TENEBRON, DONE);
 
-                // Despawn eggs, get guids through the instance OnGameObjectCreate
+                std::list<Creature*> EggsList;
+                GetCreatureListWithEntryInGrid(EggsList, me, NPC_TWILIGHT_EGG, 100.0f);
+                GetCreatureListWithEntryInGrid(EggsList, me, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
+                if (!EggsList.empty())
+                    for (std::list<Creature*>::const_iterator itr = EggsList.begin(); itr != EggsList.end(); ++itr)
+                        (*itr)->DespawnOrUnsummon();
             }
 
             void EnterCombat(Unit* target)
@@ -97,7 +109,8 @@ class boss_tenebron : public CreatureScript
 
                 events.ScheduleEvent(EVENT_SHADOW_FISSURE, 5000);
                 events.ScheduleEvent(EVENT_SHADOW_BREATH, 20000);
-                events.ScheduleEvent(EVENT_HATCH_EGGS, 30000);
+                events.ScheduleEvent(EVENT_OPEN_PORTAL, 29000);
+                events.ScheduleEvent(EVENT_SPAWN_EGGS, 30000);
 
                 instance->SetBossState(DATA_TENEBRON, IN_PROGRESS);
 
@@ -152,10 +165,12 @@ class boss_tenebron : public CreatureScript
                                 me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggs[i].GetPositionX(), TwilightEggs[i].GetPositionY(), TwilightEggs[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                         else
                             for (uint32 i; i < 6; ++i)
-                                me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggsSarth[i].GetPositionX(), TwilightEggsSarth[i].GetPositionY(), TwilightEggsSarth[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
+                                me->SummonCreature(NPC_SARTHARION_TWILIGHT_EGG, TwilightEggsSarth[i].GetPositionX(), TwilightEggsSarth[i].GetPositionY(), TwilightEggsSarth[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
+                        events.ScheduleEvent(EVENT_SPAWN_EGGS, 60000); // 30secs the portal stays open, then 30 secs cooldown
                         break;
                     case EVENT_OPEN_PORTAL:
                        // me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,30000);
+                        events.ScheduleEvent(EVENT_OPEN_PORTAL, 60000); // 30secs the portal stays open, then 30 secs cooldown
                         break;
                     case EVENT_HATCH_EGGS:
                         // Hatch remaining eggs
