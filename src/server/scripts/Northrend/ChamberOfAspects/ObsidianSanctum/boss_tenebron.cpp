@@ -75,8 +75,7 @@ class boss_tenebron : public CreatureScript
                 me->GetCreatureListWithEntryInGrid(EggsList, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
                 if (!EggsList.empty())
                     for (std::list<Creature*>::const_iterator itr = EggsList.begin(); itr != EggsList.end(); ++itr)
-                        if (Creature* eggs = *itr)
-                            eggs->DespawnOrUnsummon();
+                        (*itr)->DespawnOrUnsummon();
 
             }
 
