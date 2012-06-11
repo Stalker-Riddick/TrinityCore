@@ -35,12 +35,12 @@ enum Spells
     SPELL_TWILIGHT_TORMENT_VESP                 = 57948,
     SPELL_TWILIGHT_TORMENT_VESP_ACO             = 58853,
     SPELL_SHADOW_BREATH                         = 57570,
-    SPELL_SHADOW_BREATH_H                       = 59126,
+    SPELL_SHADOW_BREATH_25M                     = 59126,
     SPELL_SHADOW_FISSURE                        = 57579,
-    SPELL_SHADOW_FISSURE_H                      = 59127,
+    SPELL_SHADOW_FISSURE_25M                    = 59127,
     SPELL_TWILIGHT_RESIDUE                      = 61885,
     SPELL_TWILIGHT_REVENGE                      = 60639,
-    SPELL_TWILIGHT_SHIFT                        = 57620,
+    SPELL_TWILIGHT_SHIFT                        = 57620, // Next stop, the Twilight Zone!
 };
 
 enum Events
@@ -150,11 +150,11 @@ class boss_vesperon : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_VESPERON_BREATH);
-                        IsHeroic() ? DoCast(SPELL_SHADOW_BREATH_H) : DoCast(SPELL_SHADOW_BREATH);
+                        Is25ManRaid() ? DoCast(SPELL_SHADOW_BREATH_25M) : DoCast(SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
-                        IsHeroic() ? DoCast(SPELL_SHADOW_FISSURE_H) : DoCast(SPELL_SHADOW_FISSURE);
+                        Is25ManRaid() ? DoCast(SPELL_SHADOW_FISSURE_25M) : DoCast(SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SUMMON_ACOLYTE:
@@ -179,14 +179,14 @@ class boss_vesperon : public CreatureScript
 
 };
 
-class mob_acolyte_of_vesperon : public CreatureScript
+class npc_acolyte_of_vesperon : public CreatureScript
 {
     public:
-        mob_acolyte_of_vesperon() : CreatureScript("mob_acolyte_of_vesperon") { }
+        npc_acolyte_of_vesperon() : CreatureScript("npc_acolyte_of_vesperon") { }
 
-        struct mob_acolyte_of_vesperonAI : public ScriptedAI
+        struct npc_acolyte_of_vesperonAI : public ScriptedAI
         {
-            mob_acolyte_of_vesperonAI(Creature* creature) : ScriptedAI(creature) {}
+            npc_acolyte_of_vesperonAI(Creature* creature) : ScriptedAI(creature) {}
 
             Creature* vesperon;
             Creature* sartharion;
@@ -224,12 +224,12 @@ class mob_acolyte_of_vesperon : public CreatureScript
 
         CreatureAI* GetAI(Creature* creature) const
         {
-            return new mob_acolyte_of_vesperonAI(creature);
+            return new npc_acolyte_of_vesperonAI(creature);
         }
 };
 
 void AddSC_boss_vesperon()
 {
     new boss_vesperon();
-    new mob_acolyte_of_vesperon();
+    new npc_acolyte_of_vesperon();
 };

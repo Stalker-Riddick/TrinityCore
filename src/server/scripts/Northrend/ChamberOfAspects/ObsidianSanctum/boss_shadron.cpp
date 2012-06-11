@@ -35,12 +35,12 @@ enum Spells
     SPELL_GIFT_OF_TWILIGHT_SHA                  = 57835,
     SPELL_GIFT_OF_TWILIGHT_SAR                  = 58766,
     SPELL_SHADOW_BREATH                         = 57570,
-    SPELL_SHADOW_BREATH_H                       = 59126,
+    SPELL_SHADOW_BREATH_25M                     = 59126,
     SPELL_SHADOW_FISSURE                        = 57579,
-    SPELL_SHADOW_FISSURE_H                      = 59127,
+    SPELL_SHADOW_FISSURE_25M                    = 59127,
     SPELL_TWILIGHT_RESIDUE                      = 61885,
     SPELL_TWILIGHT_REVENGE                      = 60639,
-    SPELL_TWILIGHT_SHIFT                        = 57620,
+    SPELL_TWILIGHT_SHIFT                        = 57620, // Next stop, the Twilight Zone!
 
 };
 
@@ -150,11 +150,11 @@ class boss_shadron : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_SHADRON_BREATH);
-                        IsHeroic() ? DoCast(SPELL_SHADOW_BREATH_H) : DoCast(SPELL_SHADOW_BREATH);
+                        Is25ManRaid() ? DoCast(SPELL_SHADOW_BREATH_25M) : DoCast(SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
-                        IsHeroic() ? DoCast(SPELL_SHADOW_FISSURE_H) : DoCast(SPELL_SHADOW_FISSURE);
+                        Is25ManRaid() ? DoCast(SPELL_SHADOW_FISSURE_25M) : DoCast(SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SUMMON_ACOLYTE:
@@ -179,14 +179,14 @@ class boss_shadron : public CreatureScript
 
 };
 
-class mob_acolyte_of_shadron : public CreatureScript
+class npc_acolyte_of_shadron : public CreatureScript
 {
     public:
-        mob_acolyte_of_shadron() : CreatureScript("mob_acolyte_of_shadron") { }
+        npc_acolyte_of_shadron() : CreatureScript("npc_acolyte_of_shadron") { }
 
-        struct mob_acolyte_of_shadronAI : public ScriptedAI
+        struct npc_acolyte_of_shadronAI : public ScriptedAI
         {
-            mob_acolyte_of_shadronAI(Creature* creature) : ScriptedAI(creature) {}
+            npc_acolyte_of_shadronAI(Creature* creature) : ScriptedAI(creature) {}
 
             Creature* shadron;
             Creature* sartharion;
@@ -221,12 +221,12 @@ class mob_acolyte_of_shadron : public CreatureScript
 
         CreatureAI* GetAI(Creature* creature) const
         {
-            return new mob_acolyte_of_shadronAI(creature);
+            return new npc_acolyte_of_shadronAI(creature);
         }
 };
 
 void AddSC_boss_shadron()
 {
     new boss_shadron();
-    new mob_acolyte_of_shadron();
+    new npc_acolyte_of_shadron();
 };

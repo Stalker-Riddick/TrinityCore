@@ -31,19 +31,14 @@ enum Texts
 enum Spells
 {
     SPELL_POWER_OF_TENEBRON                     = 61248,
-    SPELL_SUMMON_TWILIGHT_WHELP                 = 58035,    // doesn't work, will spawn NPC_TWILIGHT_WHELP
-    SPELL_SUMMON_SARTHARION_TWILIGHT_WHELP      = 58826,    // doesn't work, will spawn NPC_SHARTHARION_TWILIGHT_WHELP
-    SPELL_HATCH_EGGS                            = 58542,
-    SPELL_HATCH_EGGS_EFFECT_H                   = 59190,
-    SPELL_HATCH_EGGS_EFFECT                     = 58685,
-    SPELL_FADE_ARMOR                            = 60708,
     SPELL_SHADOW_BREATH                         = 57570,
-    SPELL_SHADOW_BREATH_H                       = 59126,
+    SPELL_SHADOW_BREATH_25M                     = 59126,
     SPELL_SHADOW_FISSURE                        = 57579,
-    SPELL_SHADOW_FISSURE_H                      = 59127,
+    SPELL_SHADOW_FISSURE_25M                    = 59127,
     SPELL_TWILIGHT_RESIDUE                      = 61885,
     SPELL_TWILIGHT_REVENGE                      = 60639,
-    SPELL_TWILIGHT_SHIFT                        = 57620,
+    SPELL_TWILIGHT_SHIFT                        = 57620, // Next stop, the Twilight Zone!
+
 };
 
 enum Events
@@ -52,7 +47,9 @@ enum Events
     EVENT_SHADOW_BREATH                         = 2,
     EVENT_SPAWN_EGGS                            = 3,
     EVENT_OPEN_PORTAL                           = 4,
-    EVENT_HATCH_EGGS                            = 5,
+
+    // Eggs event
+    EVENT_HATCH_EGG                             = 5,
 };
 
 class boss_tenebron : public CreatureScript
@@ -70,13 +67,17 @@ class boss_tenebron : public CreatureScript
 
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT);
 
+                RemoveEggs();
+            }
+
+            void RemoveEggs()
+            {
                 std::list<Creature*> EggsList;
                 me->GetCreatureListWithEntryInGrid(EggsList, NPC_TWILIGHT_EGG, 100.0f);
                 me->GetCreatureListWithEntryInGrid(EggsList, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
                 if (!EggsList.empty())
                     for (std::list<Creature*>::const_iterator itr = EggsList.begin(); itr != EggsList.end(); ++itr)
                         (*itr)->DespawnOrUnsummon();
-
             }
 
             void JustDied(Unit* /*killer*/)
@@ -94,12 +95,7 @@ class boss_tenebron : public CreatureScript
                 else
                     instance->SetBossState(DATA_TENEBRON, DONE);
 
-                std::list<Creature*> EggsList;
-                GetCreatureListWithEntryInGrid(EggsList, me, NPC_TWILIGHT_EGG, 100.0f);
-                GetCreatureListWithEntryInGrid(EggsList, me, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
-                if (!EggsList.empty())
-                    for (std::list<Creature*>::const_iterator itr = EggsList.begin(); itr != EggsList.end(); ++itr)
-                        (*itr)->DespawnOrUnsummon();
+                RemoveEggs();
             }
 
             void EnterCombat(Unit* target)
@@ -108,7 +104,7 @@ class boss_tenebron : public CreatureScript
 
                 events.ScheduleEvent(EVENT_SHADOW_FISSURE, 5000);
                 events.ScheduleEvent(EVENT_SHADOW_BREATH, 20000);
-                events.ScheduleEvent(EVENT_OPEN_PORTAL, 29000);
+                events.ScheduleEvent(EVENT_OPEN_PORTAL, 30000);
                 events.ScheduleEvent(EVENT_SPAWN_EGGS, 30000);
 
                 instance->SetBossState(DATA_TENEBRON, IN_PROGRESS);
@@ -123,6 +119,8 @@ class boss_tenebron : public CreatureScript
                 _JustReachedHome();
 
                 instance->SetBossState(DATA_TENEBRON, FAIL);
+
+                RemoveEggs();
             }
 
             void EnterEvadeMode()
@@ -151,11 +149,11 @@ class boss_tenebron : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_TENEBRON_BREATH);
-                        IsHeroic() ? DoCast(SPELL_SHADOW_BREATH_H) : DoCast(SPELL_SHADOW_BREATH);
+                        Is25ManRaid() ? DoCast(SPELL_SHADOW_BREATH_25M) : DoCast(SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
-                        IsHeroic() ? DoCast(SPELL_SHADOW_FISSURE_H) : DoCast(SPELL_SHADOW_FISSURE);
+                        Is25ManRaid() ? DoCast(SPELL_SHADOW_FISSURE_25M) : DoCast(SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SPAWN_EGGS:
@@ -171,10 +169,6 @@ class boss_tenebron : public CreatureScript
                        // me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,30000);
                         events.ScheduleEvent(EVENT_OPEN_PORTAL, 60000); // 30secs the portal stays open, then 30 secs cooldown
                         break;
-                    case EVENT_HATCH_EGGS:
-                        // Hatch remaining eggs
-                        // Whelps always spawn in the normal realm right ?
-                        break;
                     }
                 }
             }
@@ -188,7 +182,75 @@ class boss_tenebron : public CreatureScript
 
 };
 
+class npc_twilight_egg : public CreatureScript
+{
+    public:
+        npc_twilight_egg() : CreatureScript("npc_twilight_egg") { }
+
+        struct npc_twilight_eggAI : public Scripted_NoMovementAI
+        {
+            npc_twilight_eggAI(Creature* creature) : Scripted_NoMovementAI(creature), instance(creature->GetInstanceScript())
+            {
+            }
+
+            void Reset()
+            {
+                if (instance)
+                    me->AddAura(SPELL_TWILIGHT_SHIFT, me);
+
+                Events.ScheduleEvent(EVENT_HATCH_EGG, 30000);
+            }
+
+            void UpdateAI(const uint32 diff)
+            {
+                if (!UpdateVictim())
+                    return;
+
+                Events.Update(diff);
+
+                while (uint32 eventId = Events.ExecuteEvent())
+                {
+                    switch (eventId)
+                    {
+                    case EVENT_HATCH_EGG:
+                        {
+                        if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
+                        {
+                            Creature* temp = me->SummonCreature(NPC_TWILIGHT_WHELP, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
+                            me->DealDamage(temp, (me->GetMaxHealth - me->GetHealth));
+                            temp->RemoveAllAuras();
+                            me->RemoveAllAuras();
+                            temp->SetInCombatWithZone();
+                            me->DespawnOrUnsummon();
+                        }
+                        else
+                        {
+                            Creature* temp = me->SummonCreature(NPC_SARTHARION_TWILIGHT_WHELP, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
+                            me->DealDamage(temp, (me->GetMaxHealth - me->GetHealth));
+                            temp->RemoveAllAuras();
+                            me->RemoveAllAuras();
+                            temp->SetInCombatWithZone();
+                            me->DespawnOrUnsummon();
+                        }
+                        break;
+                        }
+                    }
+                }
+            }
+        protected:
+            InstanceScript* instance;
+            EventMap Events;
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return GetObsidianSanctumAI<npc_twilight_eggAI>(creature);
+        }
+};
+
+
 void AddSC_boss_tenebron()
 {
     new boss_tenebron();
+    new npc_twilight_egg();
 };
