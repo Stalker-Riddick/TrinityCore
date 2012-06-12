@@ -44,6 +44,7 @@ enum CreaturesIds
     NPC_SARTHARION_TWILIGHT_WHELP     = 31214,
     NPC_TWILIGHT_EGG                  = 30882,
     NPC_SARTHARION_TWILIGHT_EGG       = 31204,
+    NPC_TWILIGHT_FISSURE              = 30641,
 };
 
 enum GameObjectsIds

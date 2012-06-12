@@ -41,6 +41,7 @@ set(scripts_STAT_SRCS
   Northrend/Ulduar/HallsOfStone/boss_maiden_of_grief.cpp
   Northrend/Ulduar/HallsOfStone/boss_sjonnir.cpp
   Northrend/Ulduar/HallsOfStone/halls_of_stone.cpp
+  Northrend/ChamberOfAspects/ObsidianSanctum/obsidian_sanctum.cpp
   Northrend/ChamberOfAspects/ObsidianSanctum/instance_obsidian_sanctum.cpp
   Northrend/ChamberOfAspects/ObsidianSanctum/obsidian_sanctum.h
   Northrend/ChamberOfAspects/ObsidianSanctum/boss_sartharion.cpp
