@@ -150,7 +150,7 @@ class boss_shadron : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_SHADRON_BREATH);
-                        Is25ManRaid() ? DoCast(SPELL_SHADOW_BREATH_25M) : DoCast(SPELL_SHADOW_BREATH);
+                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_SHADOW_BREATH_25M) : DoCast(me->getVictim(), SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:

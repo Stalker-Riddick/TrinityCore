@@ -150,7 +150,7 @@ class boss_vesperon : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_VESPERON_BREATH);
-                        Is25ManRaid() ? DoCast(SPELL_SHADOW_BREATH_25M) : DoCast(SPELL_SHADOW_BREATH);
+                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_SHADOW_BREATH_25M) : DoCast(me->getVictim(), SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
@@ -203,15 +203,15 @@ class npc_acolyte_of_vesperon : public CreatureScript
                 {
                     vesperon->AI()->Talk(SAY_VESPERON_OPEN_PORTAL);
                     //me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,999999);
-                    DoCast(vesperon,SPELL_TWILIGHT_TORMENT_VESP);
-                    DoCast(me,SPELL_TWILIGHT_TORMENT_VESP_ACO);
+                    DoCast(vesperon, SPELL_TWILIGHT_TORMENT_VESP);
+                    DoCast(SPELL_TWILIGHT_TORMENT_VESP_ACO);
                 }
                 else
                 {
                     vesperon->AI()->Talk(SAY_VESPERON_OPEN_PORTAL);
                     //me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,999999);
-                    DoCast(vesperon,SPELL_TWILIGHT_TORMENT_VESP);
-                    DoCast(me,SPELL_TWILIGHT_TORMENT_VESP_ACO);
+                    DoCast(vesperon, SPELL_TWILIGHT_TORMENT_VESP);
+                    DoCast(SPELL_TWILIGHT_TORMENT_VESP_ACO);
                 }
 
                 vesperon->AI()->Talk(SAY_VESPERON_DISCIPLE);
