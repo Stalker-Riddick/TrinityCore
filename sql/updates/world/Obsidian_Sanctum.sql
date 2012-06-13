@@ -1,6 +1,33 @@
 SET @SHADRON := 30451;
 SET @VESPERON := 30449;
 SET @TENEBRON := 30452;
+SET @SARTHARION := 28860;
+SET @SARTH_EGG := 31204;
+SET @TWILIGHT_EGG := 30882;
+SET @TWILIGHT_FISSURE := 30641
+SET @ACOLYTE_VESP := 31219;
+SET @ACOLYTE_SHAD := 31218;
+SET @TWILIGHT_WHELP := 30890;
+SET @SARTH_WHELP := 31214;
+SET @TWILIGHT_PORTAL := 193988;
+
+-- Update scriptnames
+UPDATE `creature_template` SET `ScriptName` = 'boss_sartharion' WHERE `entry` = @SARTHARION;
+UPDATE `creature_template` SET `ScriptName` = 'boss_shadron' WHERE `entry` = @SHADRON;
+UPDATE `creature_template` SET `ScriptName` = 'boss_tenebron' WHERE `entry` = @TENEBRON;
+UPDATE `creature_template` SET `ScriptName` = 'boss_vesperon' WHERE `entry` = @VESPERON;
+UPDATE `creature_template` SET `ScriptName` = 'npc_twilight_egg' WHERE `entry` IN (@TWILIGHT_EGG,@SARTH_EGG);
+UPDATE `creature_template` SET `ScriptName` = 'npc_twilight_fissure' WHERE `entry` = @TWILIGHT_FISSURE;
+UPDATE `creature_template` SET `ScriptName` = 'npc_acolyte_of_vesperon' WHERE `entry` = @ACOLYTE_VESP;
+UPDATE `creature_template` SET `ScriptName` = 'npc_acolyte_of_shadron' WHERE `entry` = @ACOLYTE_SHAD;
+UPDATE `creature_template` SET `AIname` = 'SmartAI' WHERE `entry` IN (@TWILIGHT_WHELP,@SARTH_WHELP);
+
+-- SAI for whelps
+DELETE FROM `smart_scripts` WHERE `entryorguid` IN (@TWILIGHT_WHELP, @SARTH_WHELP) AND `source_type`= 0;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES 
+(@TWILIGHT_WHELP,0,0,0,0,0,100,0,4000,4500,4000,4500,11,60708,0,0,0,0,0,2,0,0,0,0.0,0.0,0.0,0.0,"Cast Fade"),
+(@SARTH_WHELP,0,0,0,0,0,100,0,4000,4500,4000,4500,11,60708,0,0,0,0,0,2,0,0,0,0.0,0.0,0.0,0.0,"Cast Fade");
+
 -- Delete Shadron Texts
 DELETE FROM `script_texts` WHERE `npc_entry` = @SHADRON;
 DELETE FROM `script_texts` WHERE `entry` IN (-1615008,-1615041,-1615017,-1615042);

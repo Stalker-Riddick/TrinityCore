@@ -35,6 +35,7 @@ enum Events
     EVENT_VOID_BLAST                   = 0,
 };
 
+
 class npc_twilight_fissure : public CreatureScript
 {
     public:
@@ -79,6 +80,8 @@ class npc_twilight_fissure : public CreatureScript
 
 };
 
+
+// Next stop, the Twilight Zone!
 class go_twilight_portal : public GameObjectScript
 {
 public:
@@ -90,6 +93,7 @@ public:
         return true;
     }
 };
+
 
 void AddSC_obsidian_sanctum()
 {
