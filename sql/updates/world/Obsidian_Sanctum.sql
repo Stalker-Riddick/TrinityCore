@@ -72,3 +72,23 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 (@TENEBRON,5,0,"Arrogant little creatures! To challenge the powers you do not yet understand",14,0,100,0,0,14126,"Tenebron - SAY_TENEBRON_SPECIAL_1"),
 (@TENEBRON,5,1,"I am no mere dragon! You will find that I am much, much, much, more...",14,0,100,0,0,14127,"Tenebron - SAY_TENEBRON_SPECIAL_2"),
 (@TENEBRON,6,0,"Tenebron begins to hatch eggs in the twilight",42,0,100,0,0,0,"Vesperon - SAY_HATCH_EGGS");
+
+-- Delete Sartharion Texts
+DELETE FROM `script_texts` WHERE `npc_entry` = @SARTHARION;
+-- Insert Sartharion Texts
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+(@SARTHARION,0,0,"It is my charge to watch over these eggs. I will see you burn before any harm comes to them!",14,0,100,0,0,14093,"Sartharion - SAY_SARTHARION_AGGRO"),
+(@SARTHARION,1,0,"This pathetic siege ends NOW!",14,0,100,0,0,14103,"Sartharion - SAY_SARTHARION_BERSERK"),
+(@SARTHARION,2,0,"Burn, you misreable wretches!",14,0,100,0,0,14098,"Sartharion - SAY_SARTHARION_BREATH"),
+(@SARTHARION,3,0,"Shadron! Come to me, all is at risk!",14,0,100,0,0,14105,"Sartharion - SAY_SARTHARION_CALL_SHADRON"),
+(@SARTHARION,4,0,"Tenebron! The eggs are yours to protect as well!",14,0,100,0,0,14106,"Sartharion - SAY_SARTHARION_CALL_TENEBRON"),
+(@SARTHARION,5,0,"Vesperon! The clutch is in danger! Assist me!",14,0,100,0,0,14104,"Sartharion - SAY_SARTHARION_CALL_VESPERON"),
+(@SARTHARION,6,0,"Such is the price... of failure...",14,0,100,0,0,14107,"Sartharion - SAY_SARTHARION_DEATH"),
+(@SARTHARION,7,0,"Such flammable little insects...",14,0,100,0,0,14099,"Sartharion - SAY_SARTHARION_LAVE_STRIKE_1"),
+(@SARTHARION,7,1,"Your charred bones will litter the floor!",14,0,100,0,0,14100,"Sartharion - SAY_SARTHARION_LAVA_STRIKE_2"),
+(@SARTHARION,7,2,"How much heat can you take?",14,0,100,0,0,14101,"Sartharion - SAY_SARTHARION_LAVA_STRIKE_3"),
+(@SARTHARION,8,0,"All will be reduced to ash!",14,0,100,0,0,14102,"Sartharion - SAY_SARTHARION_LAVA_WALL"),
+(@SARTHARION,9,0,"You will make a fine meal for the hatchlings.",14,0,100,0,0,14094,"Sartharion - SAY_SARTHARION_SLAY_1"),
+(@SARTHARION,9,1,"You are at a grave disadvantage",14,0,100,0,0,14096,"Sartharion - SAY_SARTHARION_SLAY_2"),
+(@SARTHARION,9,2,"This is why we call you lesser beings.",14,0,100,0,0,14097,"Sartharion - SAY_SARTHARION_SLAY_3"),
+(@SARTHARION,10,0,"The lave surrounding Sartharion churns!",42,0,100,0,0,0,"Sartharion - SAY_SARTHARION_LAVA_CHURN");

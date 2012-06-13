@@ -23,7 +23,7 @@
 
 #define OSScriptName "instance_obsidian_sanctum"
 
-enum DataTypes
+enum Data
 {
     DATA_SARTHARION                   = 1,
     DATA_TENEBRON                     = 2,
@@ -32,7 +32,7 @@ enum DataTypes
     DATA_TWILIGHT_PORTAL              = 5,
 };
 
-enum CreaturesIds
+enum Creatures
 {
     NPC_SARTHARION                    = 28860,
     NPC_TENEBRON                      = 30452,
@@ -47,7 +47,7 @@ enum CreaturesIds
     NPC_TWILIGHT_FISSURE              = 30641,
 };
 
-enum GameObjectsIds
+enum GameObjects
 {
     GO_TWILIGHT_PORTAL                = 193988,
 };
