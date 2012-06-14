@@ -74,7 +74,83 @@ enum MovePoints
 
 enum Events
 {
-
+    EVENT_FLAME_BREATH                  = 0,
+    EVENT_TAIL_LASH                     = 1,
+    EVENT_CLEAVE                        = 2,
+    EVENT_FLAME_TSUNAMI                 = 3,
+    EVENT_CALL_DRAKES                   = 4,
+    EVENT_BERSERK                       = 5,
+    EVENT_PYROBUFFET                    = 6,
 };
 
 
+class boss_sartharion : public CreatureScript
+{
+    public:
+        boss_sartharion() : CreatureScript("boss_sartharion") { }
+
+        struct boss_sartharionAI : public BossAI
+        {
+            boss_sartharionAI(Creature* creature) : BossAI(creature, DATA_SARTHARION) {}
+
+            void Reset()
+            {
+                _Reset();
+            }
+
+            void JustDied()
+            {
+                _JustDied();
+            }
+
+            void EnterCombat()
+            {
+                _EnterCombat();
+            }
+
+            void JustReachedHome()
+            {
+                _JustReachedHome();
+            }
+
+            void EnterEvadeMode()
+            {
+                _EnterEvadeMode();
+            }
+
+            void KilledUnit()
+            {
+                Talk(SAY_SARTHARION_SLAY);
+            }
+
+            void UpdateAI(uint32 const diff)
+            {
+                if (!UpdateVictim())
+                    return;
+
+                events.Update(diff);
+
+                if (me->HasUnitState(UNIT_STATE_CASTING))
+                    return;
+
+                while (uint32 eventId = events.ExecuteEvent())
+                {
+                    switch (eventId)
+                    {
+
+                    }
+                }
+            }
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return GetObsidianSanctumAI<boss_sartharionAI>(creature);
+        }
+
+};
+
+void AddSC_boss_sartharion()
+{
+    new boss_sartharion();
+};
