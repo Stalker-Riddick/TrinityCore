@@ -228,7 +228,7 @@ class npc_twilight_egg : public CreatureScript
                         else
                         {
                             Creature* temp = me->SummonCreature(NPC_SARTHARION_TWILIGHT_WHELP, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
-                            me->DealDamage(temp, (me->GetMaxHealth - me->GetHealth));
+                            me->DealDamage(temp, (me->GetMaxHealth() - me->GetHealth()));
                             temp->RemoveAllAuras();
                             me->RemoveAllAuras();
                             temp->SetInCombatWithZone();
