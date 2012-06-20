@@ -63,6 +63,7 @@ enum Creatures
 {
     NPC_FLAME_TSUNAMI                   = 30616, // Flame Tsunami NPC
     NPC_LAVA_BLAZE                      = 30643, // Lava Blaze adds from the Lava Walls
+    NPC_FIRE_CYCLONE                    = 30648,
 };
 
 // Might need these
@@ -111,9 +112,9 @@ class boss_sartharion : public CreatureScript
 
             void ResetDrakes()
             {
-                Creature* tenebron = Creature::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
-                Creature* shadron = Creature::GetCreature(*me, instance->GetData64(DATA_SHADRON));
-                Creature* vesperon = Creature::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+                Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
 
                 if (tenebron && instance->GetBossState(DATA_TENEBRON) != DONE)
                 {
@@ -152,9 +153,9 @@ class boss_sartharion : public CreatureScript
 
             void DespawnDrakes()
             {
-                Creature* tenebron = Creature::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
-                Creature* shadron = Creature::GetCreature(*me, instance->GetData64(DATA_SHADRON));
-                Creature* vesperon = Creature::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+                Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
 
                 if (tenebron && instance->GetBossState(DATA_SARTHARION) == DONE)
                     tenebron->DisappearAndDie();
@@ -175,6 +176,19 @@ class boss_sartharion : public CreatureScript
 
                 DespawnDrakes();
 
+            }
+
+            void LavaStrike(Unit* target)
+            {
+                std::list<Creature*> fireCyclones;
+                me->GetCreatureListWithEntryInGrid(fireCyclones, NPC_FIRE_CYCLONE, 200.0f);
+
+                if (fireCyclones.empty)
+                    return;
+
+                if (Creature* fireCyclone = Trinity::Containers::SelectRandomContainerElement(fireCyclones))
+                    fireCyclone->CastSpell(target, SPELL_LAVA_STRIKE, true);
+                
             }
 
             void EnterCombat()

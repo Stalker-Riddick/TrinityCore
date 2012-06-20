@@ -85,7 +85,7 @@ class boss_tenebron : public CreatureScript
                 _JustDied();
                 Talk(SAY_TENEBRON_DEATH);
 
-                Creature* sartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                Creature* sartharion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {

@@ -75,7 +75,7 @@ class boss_shadron : public CreatureScript
                 _JustDied();
                 Talk(SAY_SHADRON_DEATH);
 
-                Creature* sartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                Creature* sartharion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
@@ -128,7 +128,7 @@ class boss_shadron : public CreatureScript
                     instance->DoRemoveAurasDueToSpellOnPlayers (SPELL_TWILIGHT_SHIFT);
                     instance->DoCastSpellOnPlayers(SPELL_TWILIGHT_RESIDUE);
 
-                    if (GameObject* portal = GameObject::GetGameObject(*me, DATA_TWILIGHT_PORTAL))
+                    if (GameObject* portal = ObjectAccessor::GetGameObject(*me, DATA_TWILIGHT_PORTAL))
                     {
                         portal->Delete();
                         me->RemoveAurasDueToSpell(SPELL_GIFT_OF_TWILIGHT_SHA);
@@ -192,8 +192,8 @@ class npc_acolyte_of_shadron : public CreatureScript
 
             void Reset()
             {
-               Creature* shadron = Creature::GetCreature(*me, _instance->GetData64(DATA_SHADRON));
-               Creature* sartharion = Creature::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
+               Creature* shadron = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SHADRON));
+               Creature* sartharion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
 
                 if (shadron)
                     shadron->AI()->JustSummoned(me);

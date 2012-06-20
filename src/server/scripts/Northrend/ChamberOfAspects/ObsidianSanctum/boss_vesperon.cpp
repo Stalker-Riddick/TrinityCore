@@ -75,7 +75,7 @@ class boss_vesperon : public CreatureScript
                 _JustDied();
                 Talk(SAY_VESPERON_DEATH);
 
-                Creature* sartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                Creature* sartharion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
@@ -128,7 +128,7 @@ class boss_vesperon : public CreatureScript
                     instance->DoRemoveAurasDueToSpellOnPlayers (SPELL_TWILIGHT_SHIFT);
                     instance->DoCastSpellOnPlayers (SPELL_TWILIGHT_RESIDUE);
 
-                    if (GameObject* portal = GameObject::GetGameObject(*me, DATA_TWILIGHT_PORTAL))
+                    if (GameObject* portal = ObjectAccessor::GetGameObject(*me, DATA_TWILIGHT_PORTAL))
                     {
                         portal->Delete();
                         me->RemoveAurasDueToSpell(SPELL_TWILIGHT_TORMENT_VESP);
@@ -192,8 +192,8 @@ class npc_acolyte_of_vesperon : public CreatureScript
 
             void Reset()
             {
-               Creature* vesperon = Creature::GetCreature(*me, _instance->GetData64(DATA_VESPERON));
-               Creature* sartharion = Creature::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
+               Creature* vesperon = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_VESPERON));
+               Creature* sartharion = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
 
                 if (vesperon)
                     vesperon->AI()->JustSummoned(me);
