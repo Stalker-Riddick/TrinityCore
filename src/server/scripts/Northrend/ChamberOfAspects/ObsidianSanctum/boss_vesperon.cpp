@@ -80,7 +80,9 @@ class boss_vesperon : public CreatureScript
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
-                    instance->SetBossState(DATA_VESPERON, SPECIAL);
+
+                    // Sartharion should set this after calling a drake.
+                    // instance->SetBossState(DATA_VESPERON, SPECIAL);
                 }
                 else
                     instance->SetBossState(DATA_VESPERON, DONE);

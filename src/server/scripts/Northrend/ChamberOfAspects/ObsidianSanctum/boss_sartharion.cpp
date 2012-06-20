@@ -77,10 +77,13 @@ enum Events
     EVENT_FLAME_BREATH                  = 0,
     EVENT_TAIL_LASH                     = 1,
     EVENT_CLEAVE                        = 2,
-    EVENT_FLAME_TSUNAMI                 = 3,
-    EVENT_CALL_DRAKES                   = 4,
-    EVENT_BERSERK                       = 5,
-    EVENT_PYROBUFFET                    = 6,
+    EVENT_LAVA_STRIKE                   = 3,
+    EVENT_FLAME_TSUNAMI                 = 4,
+    EVENT_CALL_FIRST_DRAKE              = 5,
+    EVENT_CALL_SECOND_DRAKE             = 6,
+    EVENT_CALL_THIRD_DRAKE              = 7,
+    EVENT_BERSERK                       = 8,
+    EVENT_PYROBUFFET                    = 9,
 };
 
 
@@ -96,21 +99,108 @@ class boss_sartharion : public CreatureScript
             void Reset()
             {
                 _Reset();
+
+                instance->SetBossState(DATA_SARTHARION, NOT_STARTED);
+
+                if (me->HasAura(SPELL_TWILIGHT_REVENGE))
+                    me->RemoveAurasDueToSpell(SPELL_TWILIGHT_REVENGE);
+
+                ResetDrakes();
+
+            }
+
+            void ResetDrakes()
+            {
+                Creature* tenebron = Creature::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                Creature* shadron = Creature::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                Creature* vesperon = Creature::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+
+                if (tenebron && instance->GetBossState(DATA_TENEBRON) != DONE)
+                {
+                    if (tenebron->isAlive())
+                        tenebron->AI()->EnterEvadeMode();
+                    else
+                    {
+                        tenebron->Respawn();
+                        tenebron->AI()->EnterEvadeMode();
+                    }
+                }
+
+                if (shadron && instance->GetBossState(DATA_SHADRON) != DONE)
+                {
+                    if (shadron->isAlive())
+                        shadron->AI()->EnterEvadeMode();
+                    else
+                    {
+                        shadron->Respawn();
+                        shadron->AI()->EnterEvadeMode();
+                    }
+                }
+
+                if (vesperon && instance->GetBossState(DATA_VESPERON) != DONE)
+                {
+                    if (vesperon->isAlive())
+                        vesperon->AI()->EnterEvadeMode();
+                    else
+                    {
+                        vesperon->Respawn();
+                        vesperon->AI()->EnterEvadeMode();
+                    }
+                }
+
+            }
+
+            void DespawnDrakes()
+            {
+                Creature* tenebron = Creature::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                Creature* shadron = Creature::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                Creature* vesperon = Creature::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+
+                if (tenebron && instance->GetBossState(DATA_SARTHARION) == DONE)
+                    tenebron->DisappearAndDie();
+                if (shadron && instance->GetBossState(DATA_SARTHARION) == DONE)
+                    shadron->DisappearAndDie();
+                if (vesperon && instance->GetBossState(DATA_SARTHARION) == DONE)
+                    vesperon->DisappearAndDie();
+
             }
 
             void JustDied()
             {
                 _JustDied();
+
+                Talk(SAY_SARTHARION_DEATH);
+
+                instance->SetBossState(DATA_SARTHARION, DONE);
+
+                DespawnDrakes();
+
             }
 
             void EnterCombat()
             {
                 _EnterCombat();
+
+                Talk(SAY_SARTHARION_AGGRO);
+
+                instance->SetBossState(DATA_SARTHARION, IN_PROGRESS);
+
+                events.ScheduleEvent(EVENT_FLAME_BREATH, 20000);
+                events.ScheduleEvent(EVENT_TAIL_LASH, 20000);
+                events.ScheduleEvent(EVENT_CLEAVE, 7000);
+                events.ScheduleEvent(EVENT_LAVA_STRIKE, 5000);
+                events.ScheduleEvent(EVENT_FLAME_TSUNAMI, 30000);
+                events.ScheduleEvent(EVENT_CALL_FIRST_DRAKE, 30000);
+                events.ScheduleEvent(EVENT_CALL_SECOND_DRAKE, 75000);
+                events.ScheduleEvent(EVENT_CALL_THIRD_DRAKE, 120000);
+                events.ScheduleEvent(EVENT_PYROBUFFET, 900000);
             }
 
             void JustReachedHome()
             {
                 _JustReachedHome();
+
+                instance->SetBossState(DATA_SARTHARION, NOT_STARTED);
             }
 
             void EnterEvadeMode()

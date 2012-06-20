@@ -80,7 +80,9 @@ class boss_shadron : public CreatureScript
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
-                    instance->SetBossState(DATA_SHADRON, SPECIAL);
+                    
+                    // Sartharion should set this after calling a drake.
+                    // instance->SetBossState(DATA_SHADRON, SPECIAL);
                 }
                 else
                     instance->SetBossState(DATA_SHADRON, DONE);
