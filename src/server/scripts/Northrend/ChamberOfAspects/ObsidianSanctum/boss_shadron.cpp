@@ -75,7 +75,7 @@ class boss_shadron : public CreatureScript
                 _JustDied();
                 Talk(SAY_SHADRON_DEATH);
 
-                Creature* sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                Creature* sartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
@@ -190,13 +190,10 @@ class npc_acolyte_of_shadron : public CreatureScript
         {
             npc_acolyte_of_shadronAI(Creature* creature) : ScriptedAI(creature), _instance(creature->GetInstanceScript()) {}
 
-            Creature* shadron;
-            Creature* sartharion;
-
             void Reset()
             {
-                shadron = Unit::GetCreature(*me, _instance->GetData64(DATA_SHADRON));
-                sartharion = Unit::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
+               Creature* shadron = Creature::GetCreature(*me, _instance->GetData64(DATA_SHADRON));
+               Creature* sartharion = Creature::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
 
                 if (shadron)
                     shadron->AI()->JustSummoned(me);

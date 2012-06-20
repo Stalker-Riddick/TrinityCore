@@ -75,7 +75,7 @@ class boss_vesperon : public CreatureScript
                 _JustDied();
                 Talk(SAY_VESPERON_DEATH);
 
-                Creature* sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                Creature* sartharion = Creature::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
                 {
@@ -190,13 +190,10 @@ class npc_acolyte_of_vesperon : public CreatureScript
         {
             npc_acolyte_of_vesperonAI(Creature* creature) : ScriptedAI(creature), _instance(creature->GetInstanceScript()) {}
 
-            Creature* vesperon;
-            Creature* sartharion;
-
             void Reset()
             {
-                vesperon = Unit::GetCreature(*me, _instance->GetData64(DATA_VESPERON));
-                sartharion = Unit::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
+               Creature* vesperon = Creature::GetCreature(*me, _instance->GetData64(DATA_VESPERON));
+               Creature* sartharion = Creature::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
 
                 if (vesperon)
                     vesperon->AI()->JustSummoned(me);
