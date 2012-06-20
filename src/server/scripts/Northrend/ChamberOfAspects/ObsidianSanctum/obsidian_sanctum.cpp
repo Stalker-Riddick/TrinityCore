@@ -55,9 +55,9 @@ class npc_twilight_fissure : public CreatureScript
 
             void UpdateAI (uint32 const diff)
             {
-                Events.Update(diff);
+                _events.Update(diff);
 
-                while (uint32 eventId = Events.ExecuteEvent())
+                while (uint32 eventId = _events.ExecuteEvent())
                 {
                     switch (eventId)
                     {
@@ -69,8 +69,8 @@ class npc_twilight_fissure : public CreatureScript
                 }
             }
 
-        protected:
-            EventMap Events;
+        private:
+            EventMap _events;
         };
 
         CreatureAI* GetAI(Creature* creature) const

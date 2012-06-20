@@ -191,16 +191,16 @@ class npc_twilight_egg : public CreatureScript
 
         struct npc_twilight_eggAI : public Scripted_NoMovementAI
         {
-            npc_twilight_eggAI(Creature* creature) : Scripted_NoMovementAI(creature), instance(creature->GetInstanceScript())
+            npc_twilight_eggAI(Creature* creature) : Scripted_NoMovementAI(creature), _instance(creature->GetInstanceScript())
             {
             }
 
             void Reset()
             {
-                if (instance)
+                if (_instance)
                     me->AddAura(SPELL_TWILIGHT_SHIFT, me);
 
-                Events.ScheduleEvent(EVENT_HATCH_EGG, 30000);
+                _events.ScheduleEvent(EVENT_HATCH_EGG, 30000);
             }
 
             void UpdateAI(const uint32 diff)
@@ -208,15 +208,15 @@ class npc_twilight_egg : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-                Events.Update(diff);
+                _events.Update(diff);
 
-                while (uint32 eventId = Events.ExecuteEvent())
+                while (uint32 eventId = _events.ExecuteEvent())
                 {
                     switch (eventId)
                     {
                     case EVENT_HATCH_EGG:
                         {
-                        if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
+                        if (_instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
                         {
                             Creature* temp = me->SummonCreature(NPC_TWILIGHT_WHELP, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60000);
                             me->DealDamage(temp, (me->GetMaxHealth - me->GetHealth));
@@ -239,9 +239,9 @@ class npc_twilight_egg : public CreatureScript
                     }
                 }
             }
-        protected:
-            InstanceScript* instance;
-            EventMap Events;
+        private:
+            InstanceScript* _instance;
+            EventMap _events;
         };
 
         CreatureAI* GetAI(Creature* creature) const

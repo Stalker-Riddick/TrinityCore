@@ -188,20 +188,20 @@ class npc_acolyte_of_shadron : public CreatureScript
 
         struct npc_acolyte_of_shadronAI : public ScriptedAI
         {
-            npc_acolyte_of_shadronAI(Creature* creature) : ScriptedAI(creature) {}
+            npc_acolyte_of_shadronAI(Creature* creature) : ScriptedAI(creature), _instance(creature->GetInstanceScript()) {}
 
             Creature* shadron;
             Creature* sartharion;
 
             void Reset()
             {
-                shadron = Unit::GetCreature(*me, instance->GetData64(DATA_SHADRON));
-                sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                shadron = Unit::GetCreature(*me, _instance->GetData64(DATA_SHADRON));
+                sartharion = Unit::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
 
                 if (shadron)
                     shadron->AI()->JustSummoned(me);
 
-                if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
+                if (_instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
                 {
                     shadron->AI()->Talk(SAY_SHADRON_OPEN_PORTAL);
                     //me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,999999);
@@ -217,8 +217,8 @@ class npc_acolyte_of_shadron : public CreatureScript
                 shadron->AI()->Talk(SAY_SHADRON_DISCIPLE);
             }
 
-        protected:
-            InstanceScript* instance;
+        private:
+            InstanceScript* _instance;
         };
 
         CreatureAI* GetAI(Creature* creature) const

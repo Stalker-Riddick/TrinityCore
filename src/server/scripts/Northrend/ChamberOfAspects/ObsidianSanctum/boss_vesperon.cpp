@@ -188,20 +188,20 @@ class npc_acolyte_of_vesperon : public CreatureScript
 
         struct npc_acolyte_of_vesperonAI : public ScriptedAI
         {
-            npc_acolyte_of_vesperonAI(Creature* creature) : ScriptedAI(creature) {}
+            npc_acolyte_of_vesperonAI(Creature* creature) : ScriptedAI(creature), _instance(creature->GetInstanceScript()) {}
 
             Creature* vesperon;
             Creature* sartharion;
 
             void Reset()
             {
-                vesperon = Unit::GetCreature(*me, instance->GetData64(DATA_VESPERON));
-                sartharion = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
+                vesperon = Unit::GetCreature(*me, _instance->GetData64(DATA_VESPERON));
+                sartharion = Unit::GetCreature(*me, _instance->GetData64(DATA_SARTHARION));
 
                 if (vesperon)
                     vesperon->AI()->JustSummoned(me);
 
-                if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
+                if (_instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
                 {
                     vesperon->AI()->Talk(SAY_VESPERON_OPEN_PORTAL);
                     //me->SummonGameObject(GO_TWILIGHT_PORTAL,x,y,z,0,0,0,0,0,999999);
@@ -219,8 +219,8 @@ class npc_acolyte_of_vesperon : public CreatureScript
                 vesperon->AI()->Talk(SAY_VESPERON_DISCIPLE);
             }
 
-        protected:
-            InstanceScript* instance;
+        private:
+            InstanceScript* _instance;
 
         };
 
