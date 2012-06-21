@@ -59,13 +59,6 @@ enum Spells
     SPELL_FLAME_TSUNAMI_BUFF            = 60430,
 };
 
-enum Creatures
-{
-    NPC_FLAME_TSUNAMI                   = 30616, // Flame Tsunami NPC
-    NPC_LAVA_BLAZE                      = 30643, // Lava Blaze adds from the Lava Walls
-    NPC_FIRE_CYCLONE                    = 30648,
-};
-
 // Might need these
 enum MovePoints
 {
@@ -84,8 +77,7 @@ enum Events
     EVENT_CALL_FIRST_DRAKE              = 6,
     EVENT_CALL_SECOND_DRAKE             = 7,
     EVENT_CALL_THIRD_DRAKE              = 8,
-    EVENT_BERSERK                       = 9,
-    EVENT_PYROBUFFET                    = 10,
+    EVENT_PYROBUFFET                    = 9,
 };
 
 
@@ -164,6 +156,16 @@ class boss_sartharion : public CreatureScript
                 if (Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON)))
                     vesperon->DisappearAndDie();
 
+            }
+
+            void DamageTaken(Unit* /*who*/, uint32 /*damage*/)
+            {
+                Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+
+                if (HealthBelowPct(35) && shadron->isAlive() || tenebron->isAlive() || vesperon->isAlive())
+                    DoCast(SPELL_BERSERK);
             }
 
             void JustDied()
@@ -260,12 +262,8 @@ class boss_sartharion : public CreatureScript
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
                             LavaStrike(target);
 
-                        Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
-                        Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
-                        Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
-
                         // Soft Enrage
-                        if (HealthBelowPct(10) && shadron->isAlive() || tenebron->isAlive() || vesperon->isAlive())
+                        if (HealthBelowPct(10))
                             events.ScheduleEvent(1400,2000);
                         else
                             events.ScheduleEvent(5000,20000);
@@ -277,6 +275,37 @@ class boss_sartharion : public CreatureScript
                         events.ScheduleEvent(EVENT_FLAME_TSUNAMI, 5000);
                         break;
                     case EVENT_FLAME_TSUNAMI:
+                        switch (urand(0, 1))
+                        {
+                        // Right side
+                        case 0: 
+                            {
+                            Creature* Right1 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[0].GetPositionX(), FlameTsunami[0].GetPositionY(), FlameTsunami[0].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Creature* Right2 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[2].GetPositionX(), FlameTsunami[2].GetPositionY(), FlameTsunami[2].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Creature* Right3 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[4].GetPositionX(), FlameTsunami[4].GetPositionY(), FlameTsunami[4].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Right1->GetMotionMaster()->MovePoint(0, FlameTsunami[1].GetPositionX(), FlameTsunami[1].GetPositionY(), FlameTsunami[1].GetPositionZ());
+                            Right2->GetMotionMaster()->MovePoint(0, FlameTsunami[3].GetPositionX(), FlameTsunami[3].GetPositionY(), FlameTsunami[3].GetPositionZ());
+                            Right3->GetMotionMaster()->MovePoint(0, FlameTsunami[5].GetPositionX(), FlameTsunami[5].GetPositionY(), FlameTsunami[5].GetPositionZ());
+                            break;
+                            }
+                        // Left Side
+                        case 1:
+                            {
+                            Creature* Left1 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[6].GetPositionX(), FlameTsunami[6].GetPositionY(), FlameTsunami[6].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Creature* Left2 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[8].GetPositionX(), FlameTsunami[8].GetPositionY(), FlameTsunami[8].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Left1->GetMotionMaster()->MovePoint(0, FlameTsunami[7].GetPositionX(), FlameTsunami[7].GetPositionY(), FlameTsunami[7].GetPositionZ());
+                            Left2->GetMotionMaster()->MovePoint(0, FlameTsunami[9].GetPositionX(), FlameTsunami[9].GetPositionY(), FlameTsunami[9].GetPositionZ());
+                            break;
+                            }
+                        }
+
+                    case EVENT_CALL_FIRST_DRAKE:
+                        break;
+                    case EVENT_CALL_SECOND_DRAKE:
+                        break;
+                    case EVENT_CALL_THIRD_DRAKE:
+                        break;
+                    case EVENT_PYROBUFFET:
                         break;
 
                     }

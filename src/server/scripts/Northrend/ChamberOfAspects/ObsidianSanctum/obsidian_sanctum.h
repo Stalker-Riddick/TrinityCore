@@ -45,6 +45,9 @@ enum Creatures
     NPC_TWILIGHT_EGG                  = 30882,
     NPC_SARTHARION_TWILIGHT_EGG       = 31204,
     NPC_TWILIGHT_FISSURE              = 30641,
+    NPC_FLAME_TSUNAMI                 = 30616,
+    NPC_LAVA_BLAZE                    = 30643,
+    NPC_FIRE_CYCLONE                  = 30648,
 };
 
 enum GameObjects
@@ -78,6 +81,21 @@ const Position TwilightEggsSarth[] =
     {3264.26f, 516.364f, 58.8011f}, // 4
     {3257.54f, 502.285f, 58.2077f}, // 5
 };
+
+const Position FlameTsunami[] =
+{
+    {3200.00f, 573.211f, 57.1551f}, // First right spawn (0)
+    {3289.28f, 573.211f, 57.1551f}, // First right direction (1)
+    {3200.00f, 532.211f, 57.1551f}, // Second right spawn (2)
+    {3289.28f, 532.211f, 57.1551f}, // Second right direction (3)
+    {3200.00f, 491.211f, 57.1551f}, // Third right spawn (4)
+    {3289.28f, 491.211f, 57.1551f}, // Third right direction (5)
+    {3289.28f, 511.711f, 57.1551f}, // First left spawn (6)
+    {3200.00f, 511.711f, 57.1551f}, // First left direction (7)
+    {3289.28f, 552.711f, 57.1551f}, // Second left spawn (8)
+    {3200.00f, 552.711f, 57.1551f}, // Second left direction (9)
+};
+
 
 //const Position PortalPos[]=
 //{
