@@ -154,15 +154,14 @@ class boss_sartharion : public CreatureScript
 
             void DespawnDrakes()
             {
-                Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
-                Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
-                Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+                if (instance->GetBossState(DATA_SARTHARION) != DONE)
+                    return;
 
-                if (tenebron && instance->GetBossState(DATA_SARTHARION) == DONE)
+                if (Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON)))
                     tenebron->DisappearAndDie();
-                if (shadron && instance->GetBossState(DATA_SARTHARION) == DONE)
+                if (Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON)))
                     shadron->DisappearAndDie();
-                if (vesperon && instance->GetBossState(DATA_SARTHARION) == DONE)
+                if (Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON)))
                     vesperon->DisappearAndDie();
 
             }
@@ -244,11 +243,11 @@ class boss_sartharion : public CreatureScript
                     {
                     case EVENT_FLAME_BREATH:
                         Talk(SAY_SARTHARION_BREATH);
-                        Is25ManRaid ? DoCast(me->getVictim(), SPELL_FLAME_BREATH_25M) : DoCast(me->getVictim(), SPELL_FLAME_BREATH);
+                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_FLAME_BREATH_25M) : DoCast(me->getVictim(), SPELL_FLAME_BREATH);
                         events.ScheduleEvent(EVENT_FLAME_BREATH, urand(25000, 35000));
                         break;
                     case EVENT_TAIL_LASH:
-                        Is25ManRaid ? DoCast(me->getVictim(), SPELL_TAIL_LASH_25M) : DoCast(me->getVictim(), SPELL_TAIL_LASH);
+                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_TAIL_LASH_25M) : DoCast(me->getVictim(), SPELL_TAIL_LASH);
                         events.ScheduleEvent(EVENT_TAIL_LASH, urand(15000, 20000));
                         break;
                     case EVENT_CLEAVE:
