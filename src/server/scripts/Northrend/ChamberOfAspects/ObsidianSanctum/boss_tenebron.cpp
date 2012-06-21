@@ -72,11 +72,11 @@ class boss_tenebron : public CreatureScript
 
             void RemoveEggs()
             {
-                std::list<Creature*> EggsList;
-                me->GetCreatureListWithEntryInGrid(EggsList, NPC_TWILIGHT_EGG, 100.0f);
-                me->GetCreatureListWithEntryInGrid(EggsList, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
-                if (!EggsList.empty())
-                    for (std::list<Creature*>::const_iterator itr = EggsList.begin(); itr != EggsList.end(); ++itr)
+                std::list<Creature*> eggsList;
+                me->GetCreatureListWithEntryInGrid(eggsList, NPC_TWILIGHT_EGG, 100.0f);
+                me->GetCreatureListWithEntryInGrid(eggsList, NPC_SARTHARION_TWILIGHT_EGG, 100.0f);
+                if (!eggsList.empty())
+                    for (std::list<Creature*>::const_iterator itr = eggsList.begin(); itr != eggsList.end(); ++itr)
                         (*itr)->DespawnOrUnsummon();
             }
 

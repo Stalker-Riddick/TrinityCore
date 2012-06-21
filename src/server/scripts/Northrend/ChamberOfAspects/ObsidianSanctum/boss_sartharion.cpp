@@ -37,9 +37,9 @@ enum Spells
     SPELL_BERSERK                       = 61632, // Increases the caster's attack speed by 150% and all damage it deals by 500% for 5 min.
     SPELL_CLEAVE                        = 56909, // Inflicts 35% weapon damage to an enemy and its nearest allies, affecting up to 10 targets.
     SPELL_FLAME_BREATH                  = 56908, // Inflicts 8750 to 11250 Fire damage to enemies in a cone in front of the caster.
-    SPELL_FLAME_BREATH_H                = 58956, // Inflicts 10938 to 14062 Fire damage to enemies in a cone in front of the caster.
+    SPELL_FLAME_BREATH_25M              = 58956, // Inflicts 10938 to 14062 Fire damage to enemies in a cone in front of the caster.
     SPELL_TAIL_LASH                     = 56910, // A sweeping tail strike hits all enemies behind the caster, inflicting 3063 to 3937 damage and stunning them for 2 sec.
-    SPELL_TAIL_LASH_H                   = 58957, // A sweeping tail strike hits all enemies behind the caster, inflicting 4375 to 5625 damage and stunning them for 2 sec.
+    SPELL_TAIL_LASH_25M                 = 58957, // A sweeping tail strike hits all enemies behind the caster, inflicting 4375 to 5625 damage and stunning them for 2 sec.
     SPELL_WILL_OF_SARTHARION            = 61254, // Sartharion's presence bolsters the resolve of the Twilight Drakes, increasing their total health by 25%. This effect also increases Sartharion's health by 25%.
     SPELL_LAVA_STRIKE                   = 57571, // (Real spell casted should be 57578) 57571 then trigger visual missile, then summon Lava Blaze on impact(spell 57572)
     SPELL_TWILIGHT_REVENGE              = 60639, // Increased Sartharions damage by 25% when an unnatural death occurs for one of the drakes.
@@ -79,12 +79,13 @@ enum Events
     EVENT_TAIL_LASH                     = 1,
     EVENT_CLEAVE                        = 2,
     EVENT_LAVA_STRIKE                   = 3,
-    EVENT_FLAME_TSUNAMI                 = 4,
-    EVENT_CALL_FIRST_DRAKE              = 5,
-    EVENT_CALL_SECOND_DRAKE             = 6,
-    EVENT_CALL_THIRD_DRAKE              = 7,
-    EVENT_BERSERK                       = 8,
-    EVENT_PYROBUFFET                    = 9,
+    EVENT_LAVA_CHURN                    = 4,
+    EVENT_FLAME_TSUNAMI                 = 5,
+    EVENT_CALL_FIRST_DRAKE              = 6,
+    EVENT_CALL_SECOND_DRAKE             = 7,
+    EVENT_CALL_THIRD_DRAKE              = 8,
+    EVENT_BERSERK                       = 9,
+    EVENT_PYROBUFFET                    = 10,
 };
 
 
@@ -203,7 +204,7 @@ class boss_sartharion : public CreatureScript
                 events.ScheduleEvent(EVENT_TAIL_LASH, 20000);
                 events.ScheduleEvent(EVENT_CLEAVE, 7000);
                 events.ScheduleEvent(EVENT_LAVA_STRIKE, 5000);
-                events.ScheduleEvent(EVENT_FLAME_TSUNAMI, 30000);
+                events.ScheduleEvent(EVENT_LAVA_CHURN, 25000);
                 events.ScheduleEvent(EVENT_CALL_FIRST_DRAKE, 30000);
                 events.ScheduleEvent(EVENT_CALL_SECOND_DRAKE, 75000);
                 events.ScheduleEvent(EVENT_CALL_THIRD_DRAKE, 120000);
@@ -241,6 +242,43 @@ class boss_sartharion : public CreatureScript
                 {
                     switch (eventId)
                     {
+                    case EVENT_FLAME_BREATH:
+                        Talk(SAY_SARTHARION_BREATH);
+                        Is25ManRaid ? DoCast(me->getVictim(), SPELL_FLAME_BREATH_25M) : DoCast(me->getVictim(), SPELL_FLAME_BREATH);
+                        events.ScheduleEvent(EVENT_FLAME_BREATH, urand(25000, 35000));
+                        break;
+                    case EVENT_TAIL_LASH:
+                        Is25ManRaid ? DoCast(me->getVictim(), SPELL_TAIL_LASH_25M) : DoCast(me->getVictim(), SPELL_TAIL_LASH);
+                        events.ScheduleEvent(EVENT_TAIL_LASH, urand(15000, 20000));
+                        break;
+                    case EVENT_CLEAVE:
+                        DoCast(me->getVictim(), SPELL_CLEAVE);
+                        events.ScheduleEvent(EVENT_CLEAVE, urand(7000, 10000));
+                        break;
+                    case EVENT_LAVA_STRIKE:
+                        {
+                        Talk(SAY_SARTHARION_LAVA_STRIKE);
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
+                            LavaStrike(target);
+
+                        Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                        Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                        Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+
+                        // Soft Enrage
+                        if (HealthBelowPct(10) && shadron->isAlive() || tenebron->isAlive() || vesperon->isAlive())
+                            events.ScheduleEvent(1400,2000);
+                        else
+                            events.ScheduleEvent(5000,20000);
+                        break;
+                        }
+                    case EVENT_LAVA_CHURN:
+                        Talk(SAY_SARTHARION_LAVA_CHURN);
+                        events.ScheduleEvent(EVENT_LAVA_CHURN, 25000);
+                        events.ScheduleEvent(EVENT_FLAME_TSUNAMI, 5000);
+                        break;
+                    case EVENT_FLAME_TSUNAMI:
+                        break;
 
                     }
                 }
