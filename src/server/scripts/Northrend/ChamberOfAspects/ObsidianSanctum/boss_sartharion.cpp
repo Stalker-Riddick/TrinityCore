@@ -59,11 +59,12 @@ enum Spells
     SPELL_FLAME_TSUNAMI_BUFF            = 60430,
 };
 
-// Might need these
-enum MovePoints
+
+enum Paths
 {
-    POINT_START                         = 0,
-    POINT_END                           = 1,
+    TENEBRON_PATH                       = 12641400,
+    SHADRON_PATH                        = 12641500,
+    VESPERON_PATH                       = 12641300,
 };
 
 enum Events
@@ -158,7 +159,7 @@ class boss_sartharion : public CreatureScript
 
             }
 
-            void DamageTaken(Unit* /*who*/, uint32 /*damage*/)
+            void DamageTaken(Unit* /*who*/, uint32& /*damage*/)
             {
                 Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
                 Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
@@ -275,6 +276,8 @@ class boss_sartharion : public CreatureScript
                         events.ScheduleEvent(EVENT_FLAME_TSUNAMI, 5000);
                         break;
                     case EVENT_FLAME_TSUNAMI:
+                        Talk(SAY_SARTHARION_LAVA_WALL);
+
                         switch (urand(0, 1))
                         {
                         // Right side
@@ -300,10 +303,28 @@ class boss_sartharion : public CreatureScript
                         }
 
                     case EVENT_CALL_FIRST_DRAKE:
+                        {
+                        Talk(SAY_SARTHARION_CALL_TENEBRON);
+                        Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
+                        tenebron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        tenebron->GetMotionMaster()->MovePath(TENEBRON_PATH,false);
+                        tenebron->AI()->DoCast(tenebron, SPELL_POWER_OF_TENEBRON);
                         break;
+                        }
                     case EVENT_CALL_SECOND_DRAKE:
+                        {
+                        Talk(SAY_SARTHARION_CALL_SHADRON);
+                        Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
+                        shadron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        shadron->GetMotionMaster()->MovePath(SHADRON_PATH,false);
+                        shadron->AI()->DoCast(shadron, SPELL_POWER_OF_SHADRON);
                         break;
                     case EVENT_CALL_THIRD_DRAKE:
+                        Talk(SAY_SARTHARION_CALL_VESPERON);
+                        Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
+                        vesperon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        vesperon->GetMotionMaster()->MovePath(VESPERON_PATH,false);
+                        vesperon->AI()->DoCast(vesperon, SPELL_POWER_OF_VESPERON);
                         break;
                     case EVENT_PYROBUFFET:
                         break;

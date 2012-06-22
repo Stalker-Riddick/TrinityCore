@@ -10,6 +10,9 @@ SET @ACOLYTE_SHAD := 31218;
 SET @TWILIGHT_WHELP := 30890;
 SET @SARTH_WHELP := 31214;
 SET @TWILIGHT_PORTAL := 193988;
+SET @SHADWPID := 12641400;
+SET @VESPWPID := 12641300;
+SET @TENEWPID := 12641500;
 
 -- Update scriptnames
 UPDATE `creature_template` SET `ScriptName` = 'boss_sartharion' WHERE `entry` = @SARTHARION;
@@ -92,3 +95,43 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 (@SARTHARION,9,1,"You are at a grave disadvantage",14,0,100,0,0,14096,"Sartharion - SAY_SARTHARION_SLAY_2"),
 (@SARTHARION,9,2,"This is why we call you lesser beings.",14,0,100,0,0,14097,"Sartharion - SAY_SARTHARION_SLAY_3"),
 (@SARTHARION,10,0,"The lave surrounding Sartharion churns!",42,0,100,0,0,0,"Sartharion - SAY_SARTHARION_LAVA_CHURN");
+
+-- Delete Shadron waypoints
+DELETE FROM `waypoints_data` WHERE `id` = @SHADWPID;
+-- Insert Shadron waypoints
+INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@SHADWPID,1,3293.238,472.223,106.968,0,0,0,0,100,0),
+(@SHADWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
+(@SHADWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
+(@SHADWPID,4,3283.520,496.869,98.652,0,0,0,0,100,0),
+(@SHADWPID,5,3287.316,555.875,98.652,0,0,0,0,100,0),
+(@SHADWPID,6,3250.479,585.827,98.652,0,0,0,0,100,0),
+(@SHADWPID,7,3209.969,566.523,98.652,0,0,0,0,100,0),
+(@SHADWPID,8,3271.669,526.907,61.931,0,0,0,0,100,0);
+
+-- Delete Tenebron waypoints
+DELETE FROM `waypoints_data` WHERE `id` = @TENEWPID;
+-- Insert Tenebron waypoints
+INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@TENEWPID,1,3212.854,575.597,109.856,0,0,0,0,100,0),
+(@TENEWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
+(@TENEWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
+(@TENEWPID,4,3283.520,496.869,98.652,0,0,0,0,100,0),
+(@TENEWPID,5,3287.316,555.875,98.652,0,0,0,0,100,0),
+(@TENEWPID,6,3250.479,585.827,98.652,0,0,0,0,100,0),
+(@TENEWPID,7,3209.969,566.523,98.652,0,0,0,0,100,0),
+(@TENEWPID,8,3246.425,565.367,61.249,0,0,0,0,100,0);
+
+-- Delete Vesperon waypoints
+DELETE FROM `waypoints_data` WHERE `id` = @VESPWPID;
+-- Insert Vesperon waypoints
+INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@VESPWPID,1,3193.310,472.861,102.697,0,0,0,0,100,0),
+(@VESPWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
+(@VESPWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
+(@VESPWPID,4,3283.520,496.869,98.652,0,0,0,0,100,0),
+(@VESPWPID,5,3287.316,555.875,98.652,0,0,0,0,100,0),
+(@VESPWPID,6,3250.479,585.827,98.652,0,0,0,0,100,0),
+(@VESPWPID,7,3209.969,566.523,98.652,0,0,0,0,100,0),
+(@VESPWPID,8,3227.268,533.238,59.995,0,0,0,0,100,0);
+
