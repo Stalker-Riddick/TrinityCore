@@ -82,17 +82,17 @@ class instance_obsidian_sanctum : public InstanceMapScript
                         break;
                     case DATA_SHADRON:
                         if (state == SPECIAL)
-                            if (Creature* shadron = instance->GetCreature(DATA_SHADRON))
+                            if (Creature* shadron = instance->GetCreature(GetData64(DATA_SHADRON)))
                                 shadron->AddLootMode(LOOT_MODE_HARD_MODE_2);
                         break;
                     case DATA_VESPERON:
                         if (state == SPECIAL)
-                            if (Creature* vesperon = instance->GetCreature(DATA_VESPERON))
+                            if (Creature* vesperon = instance->GetCreature(GetData64(DATA_VESPERON)))
                                 vesperon->AddLootMode(LOOT_MODE_HARD_MODE_3);
                         break;
                     case DATA_TENEBRON:
                         if (state == SPECIAL)
-                            if (Creature* tenebron = instance->GetCreature(DATA_TENEBRON))
+                            if (Creature* tenebron = instance->GetCreature(GetData64(DATA_TENEBRON)))
                                 tenebron->AddLootMode(LOOT_MODE_HARD_MODE_1);
                         break;
                     default:
