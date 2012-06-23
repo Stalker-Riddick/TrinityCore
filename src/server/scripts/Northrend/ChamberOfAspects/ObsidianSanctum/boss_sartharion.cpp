@@ -315,7 +315,6 @@ class boss_sartharion : public CreatureScript
                         tenebron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         tenebron->GetMotionMaster()->MovePath(TENEBRON_PATH,false);
                         tenebron->AI()->DoCast(tenebron, SPELL_POWER_OF_TENEBRON);
-                        instance->SetBossState(DATA_TENEBRON, SPECIAL);
                         break;
                         }
                     case EVENT_CALL_SECOND_DRAKE:
@@ -325,7 +324,6 @@ class boss_sartharion : public CreatureScript
                         shadron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         shadron->GetMotionMaster()->MovePath(SHADRON_PATH,false);
                         shadron->AI()->DoCast(shadron, SPELL_POWER_OF_SHADRON);
-                        instance->SetBossState(DATA_SHADRON, SPECIAL);
                         break;
                         }
                     case EVENT_CALL_THIRD_DRAKE:
@@ -335,7 +333,6 @@ class boss_sartharion : public CreatureScript
                         vesperon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         vesperon->GetMotionMaster()->MovePath(VESPERON_PATH,false);
                         vesperon->AI()->DoCast(vesperon, SPELL_POWER_OF_VESPERON);
-                        instance->SetBossState(DATA_VESPERON, SPECIAL);
                         break;
                         }
                     case EVENT_PYROBUFFET:
