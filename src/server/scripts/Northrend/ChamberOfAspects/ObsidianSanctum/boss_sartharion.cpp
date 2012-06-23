@@ -167,6 +167,9 @@ class boss_sartharion : public CreatureScript
 
                 if (HealthBelowPct(35) && shadron->isAlive() || tenebron->isAlive() || vesperon->isAlive())
                     DoCast(SPELL_BERSERK);
+
+                if (tenebron->isAlive() || shadron->isAlive() || vesperon->isAlive())
+                    DoCast(me, SPELL_WILL_OF_SARTHARION);
             }
 
             void JustDied()
@@ -319,13 +322,16 @@ class boss_sartharion : public CreatureScript
                         shadron->GetMotionMaster()->MovePath(SHADRON_PATH,false);
                         shadron->AI()->DoCast(shadron, SPELL_POWER_OF_SHADRON);
                         break;
+                        }
                     case EVENT_CALL_THIRD_DRAKE:
+                        {
                         Talk(SAY_SARTHARION_CALL_VESPERON);
                         Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
                         vesperon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         vesperon->GetMotionMaster()->MovePath(VESPERON_PATH,false);
                         vesperon->AI()->DoCast(vesperon, SPELL_POWER_OF_VESPERON);
                         break;
+                        }
                     case EVENT_PYROBUFFET:
                         break;
 

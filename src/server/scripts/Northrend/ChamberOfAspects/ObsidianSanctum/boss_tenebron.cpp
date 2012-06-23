@@ -160,10 +160,10 @@ class boss_tenebron : public CreatureScript
                         break;
                     case EVENT_SPAWN_EGGS:
                         if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
-                            for (uint32 i; i < 6; ++i)
+                            for (uint32 i = 0; i < 6; ++i)
                                 me->SummonCreature(NPC_TWILIGHT_EGG, TwilightEggs[i].GetPositionX(), TwilightEggs[i].GetPositionY(), TwilightEggs[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                         else
-                            for (uint32 i; i < 6; ++i)
+                            for (uint32 i = 0; i < 6; ++i)
                                 me->SummonCreature(NPC_SARTHARION_TWILIGHT_EGG, TwilightEggsSarth[i].GetPositionX(), TwilightEggsSarth[i].GetPositionY(), TwilightEggsSarth[i].GetPositionZ(), 0,TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20000);
                         events.ScheduleEvent(EVENT_SPAWN_EGGS, 60000); // 30secs the portal stays open, then 30 secs cooldown
                         break;
