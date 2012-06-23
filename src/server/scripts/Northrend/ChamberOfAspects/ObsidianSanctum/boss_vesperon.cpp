@@ -43,6 +43,11 @@ enum Spells
     SPELL_TWILIGHT_SHIFT                        = 57620, // Next stop, the Twilight Zone!
 };
 
+enum MovePoints
+{
+    VESPERON_LAND_POINT                         = 8,
+};
+
 enum Events
 {
     EVENT_SHADOW_BREATH                         = 0,
@@ -78,14 +83,30 @@ class boss_vesperon : public CreatureScript
                 Creature* sartharion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
 
                 if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS)
-                {
                     DoCast(sartharion,SPELL_TWILIGHT_REVENGE);
-
-                    // Sartharion should set this after calling a drake.
-                    // instance->SetBossState(DATA_VESPERON, SPECIAL);
-                }
                 else
                     instance->SetBossState(DATA_VESPERON, DONE);
+            }
+
+            void MovementInform(uint32 type, uint32 id)
+            {
+                if (type != WAYPOINT_MOTION_TYPE)
+                    return;
+
+                Talk(SAY_VESPERON_RESPOND);
+
+                if (id == VESPERON_LAND_POINT)
+                {
+                    me->GetMotionMaster()->Clear();
+                    me->SetInCombatWithZone();
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0, true))
+                    {
+                        me->AddThreat(target, 1.0f);
+                        me->Attack(target, true);
+                        me->GetMotionMaster()->MoveChase(target);
+                    }
+                }
+
             }
 
             void EnterCombat(Unit* target)
@@ -99,9 +120,6 @@ class boss_vesperon : public CreatureScript
 
                 instance->SetBossState(DATA_VESPERON, IN_PROGRESS);
 
-                   // This won't work here
-                // if (instance->GetBossState(DATA_SARTHARION) == IN_PROGRESS) // Perhaps needs to be moved to UpdateAI ?
-                   // DoCast(me,SPELL_POWER_OF_VESPERON); // Perhaps needs to be cast on players in the raid
             }
 
             void JustReachedHome()

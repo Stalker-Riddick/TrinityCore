@@ -59,12 +59,17 @@ enum Spells
     SPELL_FLAME_TSUNAMI_BUFF            = 60430,
 };
 
-
 enum Paths
 {
     TENEBRON_PATH                       = 12641400,
     SHADRON_PATH                        = 12641500,
     VESPERON_PATH                       = 12641300,
+};
+
+enum FlameTsunamiSides
+{
+    FLAME_TSUNAMI_RIGHT                 = 0,
+    FLAME_TSUNAMI_LEFT                  = 1,
 };
 
 enum Events
@@ -281,26 +286,24 @@ class boss_sartharion : public CreatureScript
                     case EVENT_FLAME_TSUNAMI:
                         Talk(SAY_SARTHARION_LAVA_WALL);
 
-                        switch (urand(0, 1))
+                        switch (urand(FLAME_TSUNAMI_RIGHT, FLAME_TSUNAMI_LEFT))
                         {
-                        // Right side
-                        case 0: 
+                        case FLAME_TSUNAMI_RIGHT: 
                             {
-                            Creature* Right1 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[0].GetPositionX(), FlameTsunami[0].GetPositionY(), FlameTsunami[0].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
-                            Creature* Right2 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[2].GetPositionX(), FlameTsunami[2].GetPositionY(), FlameTsunami[2].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
-                            Creature* Right3 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[4].GetPositionX(), FlameTsunami[4].GetPositionY(), FlameTsunami[4].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
-                            Right1->GetMotionMaster()->MovePoint(0, FlameTsunami[1].GetPositionX(), FlameTsunami[1].GetPositionY(), FlameTsunami[1].GetPositionZ());
-                            Right2->GetMotionMaster()->MovePoint(0, FlameTsunami[3].GetPositionX(), FlameTsunami[3].GetPositionY(), FlameTsunami[3].GetPositionZ());
-                            Right3->GetMotionMaster()->MovePoint(0, FlameTsunami[5].GetPositionX(), FlameTsunami[5].GetPositionY(), FlameTsunami[5].GetPositionZ());
+                            Creature* right1 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[0].GetPositionX(), FlameTsunami[0].GetPositionY(), FlameTsunami[0].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Creature* right2 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[2].GetPositionX(), FlameTsunami[2].GetPositionY(), FlameTsunami[2].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Creature* right3 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[4].GetPositionX(), FlameTsunami[4].GetPositionY(), FlameTsunami[4].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            right1->GetMotionMaster()->MovePoint(0, FlameTsunami[1].GetPositionX(), FlameTsunami[1].GetPositionY(), FlameTsunami[1].GetPositionZ());
+                            right2->GetMotionMaster()->MovePoint(0, FlameTsunami[3].GetPositionX(), FlameTsunami[3].GetPositionY(), FlameTsunami[3].GetPositionZ());
+                            right3->GetMotionMaster()->MovePoint(0, FlameTsunami[5].GetPositionX(), FlameTsunami[5].GetPositionY(), FlameTsunami[5].GetPositionZ());
                             break;
                             }
-                        // Left Side
-                        case 1:
+                        case FLAME_TSUNAMI_LEFT:
                             {
-                            Creature* Left1 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[6].GetPositionX(), FlameTsunami[6].GetPositionY(), FlameTsunami[6].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
-                            Creature* Left2 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[8].GetPositionX(), FlameTsunami[8].GetPositionY(), FlameTsunami[8].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
-                            Left1->GetMotionMaster()->MovePoint(0, FlameTsunami[7].GetPositionX(), FlameTsunami[7].GetPositionY(), FlameTsunami[7].GetPositionZ());
-                            Left2->GetMotionMaster()->MovePoint(0, FlameTsunami[9].GetPositionX(), FlameTsunami[9].GetPositionY(), FlameTsunami[9].GetPositionZ());
+                            Creature* left1 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[6].GetPositionX(), FlameTsunami[6].GetPositionY(), FlameTsunami[6].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            Creature* left2 = me->SummonCreature(NPC_FLAME_TSUNAMI, FlameTsunami[8].GetPositionX(), FlameTsunami[8].GetPositionY(), FlameTsunami[8].GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 12000);
+                            left1->GetMotionMaster()->MovePoint(0, FlameTsunami[7].GetPositionX(), FlameTsunami[7].GetPositionY(), FlameTsunami[7].GetPositionZ());
+                            left2->GetMotionMaster()->MovePoint(0, FlameTsunami[9].GetPositionX(), FlameTsunami[9].GetPositionY(), FlameTsunami[9].GetPositionZ());
                             break;
                             }
                         }
@@ -312,6 +315,7 @@ class boss_sartharion : public CreatureScript
                         tenebron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         tenebron->GetMotionMaster()->MovePath(TENEBRON_PATH,false);
                         tenebron->AI()->DoCast(tenebron, SPELL_POWER_OF_TENEBRON);
+                        instance->SetBossState(DATA_TENEBRON, SPECIAL);
                         break;
                         }
                     case EVENT_CALL_SECOND_DRAKE:
@@ -321,6 +325,7 @@ class boss_sartharion : public CreatureScript
                         shadron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         shadron->GetMotionMaster()->MovePath(SHADRON_PATH,false);
                         shadron->AI()->DoCast(shadron, SPELL_POWER_OF_SHADRON);
+                        instance->SetBossState(DATA_SHADRON, SPECIAL);
                         break;
                         }
                     case EVENT_CALL_THIRD_DRAKE:
@@ -330,6 +335,7 @@ class boss_sartharion : public CreatureScript
                         vesperon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         vesperon->GetMotionMaster()->MovePath(VESPERON_PATH,false);
                         vesperon->AI()->DoCast(vesperon, SPELL_POWER_OF_VESPERON);
+                        instance->SetBossState(DATA_VESPERON, SPECIAL);
                         break;
                         }
                     case EVENT_PYROBUFFET:
