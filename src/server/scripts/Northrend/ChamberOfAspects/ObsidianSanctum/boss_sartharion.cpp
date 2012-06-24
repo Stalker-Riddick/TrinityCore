@@ -198,7 +198,7 @@ class boss_sartharion : public CreatureScript
                 std::list<Creature*> fireCyclones;
                 me->GetCreatureListWithEntryInGrid(fireCyclones, NPC_FIRE_CYCLONE, 200.0f);
 
-                if (fireCyclones.empty)
+                if (fireCyclones.empty())
                     return;
 
                 if (Creature* fireCyclone = Trinity::Containers::SelectRandomContainerElement(fireCyclones))
@@ -380,7 +380,7 @@ class npc_flame_tsunami : public CreatureScript
                 
                 _events.Update(diff);
 
-                while (uint32 _eventId = _events.ExecuteEvent)
+                while (uint32 _eventId = _events.ExecuteEvent())
                 {
                     switch (_eventId)
                     {
@@ -414,4 +414,5 @@ class npc_flame_tsunami : public CreatureScript
 void AddSC_boss_sartharion()
 {
     new boss_sartharion();
+    new npc_flame_tsunami();
 };
