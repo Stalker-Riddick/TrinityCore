@@ -10,6 +10,7 @@ SET @ACOLYTE_SHAD := 31218;
 SET @TWILIGHT_WHELP := 30890;
 SET @SARTH_WHELP := 31214;
 SET @TWILIGHT_PORTAL := 193988;
+SET @FLAME_TSUNAMI := 30616;
 SET @SHADWPID := 12641400;
 SET @VESPWPID := 12641300;
 SET @TENEWPID := 12641500;
@@ -23,6 +24,7 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_twilight_egg' WHERE `entry` I
 UPDATE `creature_template` SET `ScriptName` = 'npc_twilight_fissure' WHERE `entry` = @TWILIGHT_FISSURE;
 UPDATE `creature_template` SET `ScriptName` = 'npc_acolyte_of_vesperon' WHERE `entry` = @ACOLYTE_VESP;
 UPDATE `creature_template` SET `ScriptName` = 'npc_acolyte_of_shadron' WHERE `entry` = @ACOLYTE_SHAD;
+UPDATE `creature_template` SET `ScriptName` = 'npc_flame_tsunami' WHERE `entry` = @FLAME_TSUNAMI;
 UPDATE `creature_template` SET `AIname` = 'SmartAI' WHERE `entry` IN (@TWILIGHT_WHELP,@SARTH_WHELP);
 
 -- SAI for whelps

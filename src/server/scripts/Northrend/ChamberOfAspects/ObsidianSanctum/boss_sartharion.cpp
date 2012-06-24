@@ -84,6 +84,10 @@ enum Events
     EVENT_CALL_SECOND_DRAKE             = 7,
     EVENT_CALL_THIRD_DRAKE              = 8,
     EVENT_PYROBUFFET                    = 9,
+
+    // Flame Tsunami events
+    EVENT_TSUNAMI                       = 10,
+    EVENT_TSUNAMI_BUFF                  = 11,
 };
 
 
@@ -336,6 +340,7 @@ class boss_sartharion : public CreatureScript
                         break;
                         }
                     case EVENT_PYROBUFFET:
+                        DoCast(me, SPELL_PYROBUFFET, true);
                         break;
 
                     }
@@ -349,6 +354,62 @@ class boss_sartharion : public CreatureScript
         }
 
 };
+
+class npc_flame_tsunami : public CreatureScript
+{
+    public:
+        npc_flame_tsunami() : CreatureScript("npc_flame_tsunami") { }
+
+        struct npc_flame_tsunamiAI : public ScriptedAI
+        {
+            npc_flame_tsunamiAI(Creature* creature) : ScriptedAI(creature) {}
+
+            void Reset()
+            {
+                me->SetDisplayId(11686);
+                me->AddAura(SPELL_FLAME_TSUNAMI, me);
+                me->SetReactState(REACT_PASSIVE);
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                _events.ScheduleEvent(EVENT_TSUNAMI, 100);
+                _events.ScheduleEvent(EVENT_TSUNAMI_BUFF, 1000);
+            }
+
+            void UpdateAI(const uint32 diff)
+            {
+                
+                _events.Update(diff);
+
+                while (uint32 _eventId = _events.ExecuteEvent)
+                {
+                    switch (_eventId)
+                    {
+                    case EVENT_TSUNAMI:
+                        DoCast(me, SPELL_FLAME_TSUNAMI_DMG_AURA);
+                        _events.ScheduleEvent(EVENT_TSUNAMI, 500);
+                        break;
+                    case EVENT_TSUNAMI_BUFF:
+                        {
+                        if (Unit* lavaBlaze = GetClosestCreatureWithEntry(me, NPC_LAVA_BLAZE, 10.0f, true))
+                            lavaBlaze->CastSpell(lavaBlaze, SPELL_FLAME_TSUNAMI_BUFF, true);
+                        _events.ScheduleEvent(EVENT_TSUNAMI_BUFF, 1000);
+                        break;
+                        }
+                    }
+                }
+            }
+
+        private:
+            EventMap _events;
+        };
+
+        CreatureAI* GetAI(Creature* creature) const
+        {
+            return new npc_flame_tsunamiAI(creature);
+        }
+
+};
+
 
 void AddSC_boss_sartharion()
 {
