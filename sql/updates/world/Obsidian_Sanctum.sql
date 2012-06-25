@@ -99,9 +99,9 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 (@SARTHARION,10,0,"The lave surrounding Sartharion churns!",42,0,100,0,0,0,"Sartharion - SAY_SARTHARION_LAVA_CHURN");
 
 -- Delete Shadron waypoints
-DELETE FROM `waypoints_data` WHERE `id` = @SHADWPID;
+DELETE FROM `waypoint_data` WHERE `id` = @SHADWPID;
 -- Insert Shadron waypoints
-INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
 (@SHADWPID,1,3293.238,472.223,106.968,0,0,0,0,100,0),
 (@SHADWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
 (@SHADWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
@@ -112,9 +112,9 @@ INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`
 (@SHADWPID,8,3271.669,526.907,61.931,0,0,0,0,100,0);
 
 -- Delete Tenebron waypoints
-DELETE FROM `waypoints_data` WHERE `id` = @TENEWPID;
+DELETE FROM `waypoint_data` WHERE `id` = @TENEWPID;
 -- Insert Tenebron waypoints
-INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
 (@TENEWPID,1,3212.854,575.597,109.856,0,0,0,0,100,0),
 (@TENEWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
 (@TENEWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
@@ -125,9 +125,9 @@ INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`
 (@TENEWPID,8,3246.425,565.367,61.249,0,0,0,0,100,0);
 
 -- Delete Vesperon waypoints
-DELETE FROM `waypoints_data` WHERE `id` = @VESPWPID;
+DELETE FROM `waypoint_data` WHERE `id` = @VESPWPID;
 -- Insert Vesperon waypoints
-INSERT INTO `waypoints_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
 (@VESPWPID,1,3193.310,472.861,102.697,0,0,0,0,100,0),
 (@VESPWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
 (@VESPWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
