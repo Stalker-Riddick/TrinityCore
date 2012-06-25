@@ -15,6 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ObjectMgr.h"
+#include "ScriptMgr.h"
+#include "InstanceScript.h"
+#include "ScriptedCreature.h"
+#include "Map.h"
 #include "obsidian_sanctum.h"
 
 class instance_obsidian_sanctum : public InstanceMapScript
