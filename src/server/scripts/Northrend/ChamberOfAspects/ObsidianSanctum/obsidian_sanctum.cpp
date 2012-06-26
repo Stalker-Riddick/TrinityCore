@@ -35,7 +35,7 @@ enum Spells
 enum Events
 {
     // Twilight Fissure
-    EVENT_VOID_BLAST                   = 0,
+    EVENT_VOID_BLAST                   = 1,
 };
 
 
@@ -50,17 +50,18 @@ class npc_twilight_fissure : public CreatureScript
 
             void Reset()
             {
-                me->AddAura(SPELL_VOID_ZONE_PREEFFECT_VISUAL, me);
-                me->AddAura(SPELL_VOID_ZONE_VISUAL, me);
+                //me->AddAura(SPELL_VOID_ZONE_PREEFFECT_VISUAL, me);
+                //me->AddAura(SPELL_VOID_ZONE_VISUAL, me);
+                _events.ScheduleEvent(EVENT_VOID_BLAST, 5000);
             }
 
             void UpdateAI (uint32 const diff)
             {
                 _events.Update(diff);
 
-                while (uint32 eventId = _events.ExecuteEvent())
+                while (uint32 _eventId = _events.ExecuteEvent())
                 {
-                    switch (eventId)
+                    switch (_eventId)
                     {
                     case EVENT_VOID_BLAST:
                         DoCastAOE(Is25ManRaid() ? SPELL_VOID_BLAST_25M : SPELL_VOID_BLAST);

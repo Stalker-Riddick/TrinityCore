@@ -184,7 +184,8 @@ class boss_shadron : public CreatureScript
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
-                        DoCast(Is25ManRaid() ? SPELL_SHADOW_FISSURE_25M : SPELL_SHADOW_FISSURE);
+                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                            DoCast(target, Is25ManRaid() ? SPELL_SHADOW_FISSURE_25M : SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SUMMON_ACOLYTE:
