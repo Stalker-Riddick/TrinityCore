@@ -64,9 +64,9 @@ enum Spells
 
 enum Paths
 {
-    TENEBRON_PATH                       = 12641400,
-    SHADRON_PATH                        = 12641500,
-    VESPERON_PATH                       = 12641300,
+    TENEBRON_PATH                       = 1264150,
+    SHADRON_PATH                        = 1264140,
+    VESPERON_PATH                       = 1264130,
 };
 
 enum FlameTsunamiSides
@@ -77,20 +77,20 @@ enum FlameTsunamiSides
 
 enum Events
 {
-    EVENT_FLAME_BREATH                  = 0,
-    EVENT_TAIL_LASH                     = 1,
-    EVENT_CLEAVE                        = 2,
-    EVENT_LAVA_STRIKE                   = 3,
-    EVENT_LAVA_CHURN                    = 4,
-    EVENT_FLAME_TSUNAMI                 = 5,
-    EVENT_CALL_FIRST_DRAKE              = 6,
-    EVENT_CALL_SECOND_DRAKE             = 7,
-    EVENT_CALL_THIRD_DRAKE              = 8,
-    EVENT_PYROBUFFET                    = 9,
+    EVENT_FLAME_BREATH                  = 1,
+    EVENT_TAIL_LASH                     = 2,
+    EVENT_CLEAVE                        = 3,
+    EVENT_LAVA_STRIKE                   = 4,
+    EVENT_LAVA_CHURN                    = 5,
+    EVENT_FLAME_TSUNAMI                 = 6,
+    EVENT_CALL_FIRST_DRAKE              = 7,
+    EVENT_CALL_SECOND_DRAKE             = 8,
+    EVENT_CALL_THIRD_DRAKE              = 9,
+    EVENT_PYROBUFFET                    = 10,
 
     // Flame Tsunami events
-    EVENT_TSUNAMI                       = 10,
-    EVENT_TSUNAMI_BUFF                  = 11,
+    EVENT_TSUNAMI                       = 11,
+    EVENT_TSUNAMI_BUFF                  = 12,
 };
 
 
@@ -177,7 +177,7 @@ class boss_sartharion : public CreatureScript
                 Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
                 Creature* vesperon = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_VESPERON));
 
-                if (HealthBelowPct(35) && shadron->isAlive() || tenebron->isAlive() || vesperon->isAlive())
+                if (!HealthAbovePct(35) && (shadron->isAlive() || tenebron->isAlive() || vesperon->isAlive()))
                     DoCast(SPELL_BERSERK);
 
                 if (tenebron->isAlive() || shadron->isAlive() || vesperon->isAlive())
@@ -209,9 +209,11 @@ class boss_sartharion : public CreatureScript
                 
             }
 
-            void EnterCombat()
+            void EnterCombat(Unit* target)
             {
                 _EnterCombat();
+
+                DoZoneInCombat();
 
                 Talk(SAY_SARTHARION_AGGRO);
 
@@ -232,7 +234,7 @@ class boss_sartharion : public CreatureScript
             {
                 _JustReachedHome();
 
-                instance->SetBossState(DATA_SARTHARION, NOT_STARTED);
+                instance->SetBossState(DATA_SARTHARION, FAIL);
             }
 
             void EnterEvadeMode()
@@ -261,15 +263,15 @@ class boss_sartharion : public CreatureScript
                     {
                     case EVENT_FLAME_BREATH:
                         Talk(SAY_SARTHARION_BREATH);
-                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_FLAME_BREATH_25M) : DoCast(me->getVictim(), SPELL_FLAME_BREATH);
+                        DoCastVictim(Is25ManRaid() ? SPELL_FLAME_BREATH_25M : SPELL_FLAME_BREATH);
                         events.ScheduleEvent(EVENT_FLAME_BREATH, urand(25000, 35000));
                         break;
                     case EVENT_TAIL_LASH:
-                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_TAIL_LASH_25M) : DoCast(me->getVictim(), SPELL_TAIL_LASH);
+                        DoCastVictim(Is25ManRaid() ? SPELL_TAIL_LASH_25M : SPELL_TAIL_LASH);
                         events.ScheduleEvent(EVENT_TAIL_LASH, urand(15000, 20000));
                         break;
                     case EVENT_CLEAVE:
-                        DoCast(me->getVictim(), SPELL_CLEAVE);
+                        DoCastVictim(SPELL_CLEAVE);
                         events.ScheduleEvent(EVENT_CLEAVE, urand(7000, 10000));
                         break;
                     case EVENT_LAVA_STRIKE:
@@ -279,7 +281,7 @@ class boss_sartharion : public CreatureScript
                             LavaStrike(target);
 
                         // Soft Enrage
-                        if (HealthBelowPct(10))
+                        if (!HealthAbovePct(10))
                             events.ScheduleEvent(1400,2000);
                         else
                             events.ScheduleEvent(5000,20000);
@@ -320,7 +322,7 @@ class boss_sartharion : public CreatureScript
                         Talk(SAY_SARTHARION_CALL_TENEBRON);
                         Creature* tenebron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_TENEBRON));
                         tenebron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                        tenebron->GetMotionMaster()->MovePath(TENEBRON_PATH,false);
+                        tenebron->GetMotionMaster()->MovePath(TENEBRON_PATH, false);
                         tenebron->AI()->DoCast(tenebron, SPELL_POWER_OF_TENEBRON);
                         break;
                         }
@@ -329,7 +331,7 @@ class boss_sartharion : public CreatureScript
                         Talk(SAY_SARTHARION_CALL_SHADRON);
                         Creature* shadron = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_SHADRON));
                         shadron->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                        shadron->GetMotionMaster()->MovePath(SHADRON_PATH,false);
+                        shadron->GetMotionMaster()->MovePath(SHADRON_PATH, false);
                         shadron->AI()->DoCast(shadron, SPELL_POWER_OF_SHADRON);
                         break;
                         }
@@ -348,6 +350,8 @@ class boss_sartharion : public CreatureScript
 
                     }
                 }
+
+                DoMeleeAttackIfReady();
             }
         };
 

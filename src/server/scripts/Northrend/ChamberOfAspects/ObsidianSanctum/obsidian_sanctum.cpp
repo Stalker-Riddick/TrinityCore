@@ -42,7 +42,7 @@ enum Events
 class npc_twilight_fissure : public CreatureScript
 {
     public:
-        npc_twilight_fissure() : CreatureScript("npc_acolyte_of_vesperon") { }
+        npc_twilight_fissure() : CreatureScript("npc_twilight_fissure") { }
 
         struct npc_twilight_fissureAI : public Scripted_NoMovementAI
         {
@@ -50,8 +50,6 @@ class npc_twilight_fissure : public CreatureScript
 
             void Reset()
             {
-                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 me->AddAura(SPELL_VOID_ZONE_PREEFFECT_VISUAL, me);
                 me->AddAura(SPELL_VOID_ZONE_VISUAL, me);
             }
@@ -65,8 +63,9 @@ class npc_twilight_fissure : public CreatureScript
                     switch (eventId)
                     {
                     case EVENT_VOID_BLAST:
-                        Is25ManRaid() ? DoCast(SPELL_VOID_BLAST_25M) : DoCast(SPELL_VOID_BLAST);
-                        me->DespawnOrUnsummon();
+                        DoCastAOE(Is25ManRaid() ? SPELL_VOID_BLAST_25M : SPELL_VOID_BLAST);
+                        me->RemoveAllAuras();
+                        me->Kill(me);
                         break;
                     }
                 }
@@ -92,7 +91,7 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go)
     {
-        player->CastSpell(player,SPELL_TWILIGHT_SHIFT,true);
+        player->CastSpell(player, SPELL_TWILIGHT_SHIFT, true);
         return true;
     }
 };

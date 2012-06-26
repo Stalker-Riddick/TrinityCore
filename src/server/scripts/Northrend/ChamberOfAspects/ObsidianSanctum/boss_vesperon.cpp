@@ -53,9 +53,9 @@ enum MovePoints
 
 enum Events
 {
-    EVENT_SHADOW_BREATH                         = 0,
-    EVENT_SHADOW_FISSURE                        = 1,
-    EVENT_SUMMON_ACOLYTE                        = 2,
+    EVENT_SHADOW_BREATH                         = 1,
+    EVENT_SHADOW_FISSURE                        = 2,
+    EVENT_SUMMON_ACOLYTE                        = 3,
 };
 
 class boss_vesperon : public CreatureScript
@@ -70,6 +70,8 @@ class boss_vesperon : public CreatureScript
             void Reset()
             {
                 _Reset();
+
+                instance->SetBossState(DATA_VESPERON, NOT_STARTED);
 
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT);
 
@@ -118,6 +120,8 @@ class boss_vesperon : public CreatureScript
             void EnterCombat(Unit* target)
             {
                 _EnterCombat();
+                DoZoneInCombat();
+
                 Talk(SAY_VESPERON_AGGRO);
 
                 events.ScheduleEvent(EVENT_SHADOW_FISSURE,5000);
@@ -176,24 +180,26 @@ class boss_vesperon : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_VESPERON_BREATH);
-                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_SHADOW_BREATH_25M) : DoCast(me->getVictim(), SPELL_SHADOW_BREATH);
+                        DoCastVictim(Is25ManRaid() ? SPELL_SHADOW_BREATH_25M : SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
-                        Is25ManRaid() ? DoCast(SPELL_SHADOW_FISSURE_25M) : DoCast(SPELL_SHADOW_FISSURE);
+                        DoCast(Is25ManRaid() ? SPELL_SHADOW_FISSURE_25M : SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SUMMON_ACOLYTE:
                         if (Creature* acolyte = me->FindNearestCreature(NPC_ACOLYTE_OF_VESPERON, 50.0f))
-                            if (!acolyte)
-                                if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
-                                    me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolytesPos[2].GetPositionX(), AcolytesPos[2].GetPositionY(), AcolytesPos[2].GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 15000);
-                                else
-                                    me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolytesPos[3].GetPositionX(), AcolytesPos[3].GetPositionY(), AcolytesPos[3].GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 15000);
+                            return;
+                        if (instance->GetBossState(DATA_SARTHARION) != IN_PROGRESS)
+                            me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolytesPos[2].GetPositionX(), AcolytesPos[2].GetPositionY(), AcolytesPos[2].GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 15000);
+                        else
+                            me->SummonCreature(NPC_ACOLYTE_OF_VESPERON, AcolytesPos[3].GetPositionX(), AcolytesPos[3].GetPositionY(), AcolytesPos[3].GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN, 15000);
                         events.ScheduleEvent(EVENT_SUMMON_ACOLYTE,30000);
                         break;
                     }
                 }
+
+                DoMeleeAttackIfReady();
             }
 
         };

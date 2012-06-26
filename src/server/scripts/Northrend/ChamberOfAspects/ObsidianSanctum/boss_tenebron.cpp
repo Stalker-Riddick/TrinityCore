@@ -73,6 +73,8 @@ class boss_tenebron : public CreatureScript
             {
                 _Reset();
 
+                instance->SetBossState(DATA_TENEBRON, NOT_STARTED);
+
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_TWILIGHT_SHIFT);
 
                 RemoveEggs();
@@ -130,6 +132,9 @@ class boss_tenebron : public CreatureScript
             void EnterCombat(Unit* target)
             {
                 _EnterCombat();
+                DoZoneInCombat();
+                
+                Talk(SAY_TENEBRON_AGGRO);
 
                 events.ScheduleEvent(EVENT_SHADOW_FISSURE, 5000);
                 events.ScheduleEvent(EVENT_SHADOW_BREATH, 20000);
@@ -175,11 +180,11 @@ class boss_tenebron : public CreatureScript
                     {
                     case EVENT_SHADOW_BREATH:
                         Talk(SAY_TENEBRON_BREATH);
-                        Is25ManRaid() ? DoCast(me->getVictim(), SPELL_SHADOW_BREATH_25M) : DoCast(me->getVictim(), SPELL_SHADOW_BREATH);
+                        DoCastVictim(Is25ManRaid() ? SPELL_SHADOW_BREATH_25M : SPELL_SHADOW_BREATH);
                         events.ScheduleEvent(EVENT_SHADOW_BREATH,urand(15000, 25000));
                         break;
                     case EVENT_SHADOW_FISSURE:
-                        Is25ManRaid() ? DoCast(SPELL_SHADOW_FISSURE_25M) : DoCast(SPELL_SHADOW_FISSURE);
+                        DoCast(Is25ManRaid() ? SPELL_SHADOW_FISSURE_25M : SPELL_SHADOW_FISSURE);
                         events.ScheduleEvent(EVENT_SHADOW_FISSURE,urand(10000, 15000));
                         break;
                     case EVENT_SPAWN_EGGS:
@@ -197,6 +202,8 @@ class boss_tenebron : public CreatureScript
                         break;
                     }
                 }
+
+                DoMeleeAttackIfReady();
             }
 
         };

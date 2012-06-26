@@ -4,16 +4,16 @@ SET @TENEBRON := 30452;
 SET @SARTHARION := 28860;
 SET @SARTH_EGG := 31204;
 SET @TWILIGHT_EGG := 30882;
-SET @TWILIGHT_FISSURE := 30641
+SET @TWILIGHT_FISSURE := 30641;
 SET @ACOLYTE_VESP := 31219;
 SET @ACOLYTE_SHAD := 31218;
 SET @TWILIGHT_WHELP := 30890;
 SET @SARTH_WHELP := 31214;
 SET @TWILIGHT_PORTAL := 193988;
 SET @FLAME_TSUNAMI := 30616;
-SET @SHADWPID := 12641400;
-SET @VESPWPID := 12641300;
-SET @TENEWPID := 12641500;
+SET @SHADWPID := 1264140;
+SET @VESPWPID := 1264130;
+SET @TENEWPID := 1264150;
 
 -- Update scriptnames
 UPDATE `creature_template` SET `ScriptName` = 'boss_sartharion' WHERE `entry` = @SARTHARION;
@@ -25,6 +25,7 @@ UPDATE `creature_template` SET `ScriptName` = 'npc_twilight_fissure' WHERE `entr
 UPDATE `creature_template` SET `ScriptName` = 'npc_acolyte_of_vesperon' WHERE `entry` = @ACOLYTE_VESP;
 UPDATE `creature_template` SET `ScriptName` = 'npc_acolyte_of_shadron' WHERE `entry` = @ACOLYTE_SHAD;
 UPDATE `creature_template` SET `ScriptName` = 'npc_flame_tsunami' WHERE `entry` = @FLAME_TSUNAMI;
+UPDATE `gameobject_template` SET `ScriptName` = 'go_twilight_portal' WHERE `entry` = @TWILIGHT_PORTAL;
 UPDATE `creature_template` SET `AIname` = 'SmartAI' WHERE `entry` IN (@TWILIGHT_WHELP,@SARTH_WHELP);
 
 -- SAI for whelps
@@ -36,6 +37,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 -- Delete Shadron Texts
 DELETE FROM `script_texts` WHERE `npc_entry` = @SHADRON;
 DELETE FROM `script_texts` WHERE `entry` IN (-1615008,-1615041,-1615017,-1615042);
+DELETE FROM `creature_text` WHERE `entry` = @SHADRON;
 -- Insert Shadron Texts
 INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
 (@SHADRON,0,0,"I fear nothing, least of all you!",14,0,100,0,0,14111,"Shadron - SAY_SHADRON_AGGRO"),
@@ -51,6 +53,7 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 
 -- Delete Vesperon Texts
 DELETE FROM `script_texts` WHERE `npc_entry` = @VESPERON;
+DELETE FROM `creature_text` WHERE `entry` = @VESPERON;
 -- Insert Vesperon Texts
 INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
 (@VESPERON,0,0,"You pose no threat, lesser beings...give me your worst!",14,0,100,0,0,14133,"Vesperon - SAY_VESPERON_AGGRO"),
@@ -66,6 +69,7 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 
 -- Delete Tenebron Texts
 DELETE FROM `script_texts` WHERE `npc_entry` = @TENEBRON;
+DELETE FROM `creature_text` WHERE `entry` = @TENEBRON;
 -- Insert Tenebron Texts
 INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
 (@TENEBRON,0,0,"You have no place here.Your place is among the departed.",14,0,100,0,0,14122,"Tenebron - SAY_TENEBRON_AGGRO"),
@@ -80,6 +84,7 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 
 -- Delete Sartharion Texts
 DELETE FROM `script_texts` WHERE `npc_entry` = @SARTHARION;
+DELETE FROM `creature_text` WHERE `entry` = @SARTHARION;
 -- Insert Sartharion Texts
 INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
 (@SARTHARION,0,0,"It is my charge to watch over these eggs. I will see you burn before any harm comes to them!",14,0,100,0,0,14093,"Sartharion - SAY_SARTHARION_AGGRO"),
@@ -101,7 +106,7 @@ INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`pr
 -- Delete Shadron waypoints
 DELETE FROM `waypoint_data` WHERE `id` = @SHADWPID;
 -- Insert Shadron waypoints
-INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
 (@SHADWPID,1,3293.238,472.223,106.968,0,0,0,0,100,0),
 (@SHADWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
 (@SHADWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
@@ -114,7 +119,7 @@ INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,
 -- Delete Tenebron waypoints
 DELETE FROM `waypoint_data` WHERE `id` = @TENEWPID;
 -- Insert Tenebron waypoints
-INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
 (@TENEWPID,1,3212.854,575.597,109.856,0,0,0,0,100,0),
 (@TENEWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
 (@TENEWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
@@ -127,7 +132,7 @@ INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,
 -- Delete Vesperon waypoints
 DELETE FROM `waypoint_data` WHERE `id` = @VESPWPID;
 -- Insert Vesperon waypoints
-INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`orientation`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
 (@VESPWPID,1,3193.310,472.861,102.697,0,0,0,0,100,0),
 (@VESPWPID,2,3214.012,468.932,98.652,0,0,0,0,100,0),
 (@VESPWPID,3,3244.950,468.427,98.652,0,0,0,0,100,0),
@@ -137,3 +142,9 @@ INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`postion_z`,
 (@VESPWPID,7,3209.969,566.523,98.652,0,0,0,0,100,0),
 (@VESPWPID,8,3227.268,533.238,59.995,0,0,0,0,100,0);
 
+-- Spell conditions
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId` = 13 AND `SourceEntry` = 61632;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`SourceId`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionTarget`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,7,61632,0,0,31,0,3,30451,0,0,0,'','BERSERK - SHADRON'),
+(13,7,61632,0,1,31,0,3,30449,0,0,0,'','BERSERK - VESPERON'),
+(13,7,61632,0,2,31,0,3,30452,0,0,0,'','BERSERK - TENEBRON');

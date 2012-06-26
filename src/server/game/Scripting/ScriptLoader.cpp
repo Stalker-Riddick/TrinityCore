@@ -401,6 +401,10 @@ void AddSC_oculus();
 void AddSC_boss_malygos();              // The Nexus: Eye of Eternity
 void AddSC_instance_eye_of_eternity();
 void AddSC_boss_sartharion();            //Obsidian Sanctum
+void AddSC_boss_shadron();
+void AddSC_boss_tenebron();
+void AddSC_boss_vesperon();
+void AddSC_obsidian_sanctum();
 void AddSC_instance_obsidian_sanctum();
 void AddSC_boss_bjarngrim();             //Ulduar Halls of Lightning
 void AddSC_boss_loken();
@@ -1104,7 +1108,11 @@ void AddNorthrendScripts()
     AddSC_oculus();
     AddSC_boss_malygos();              // The Nexus: Eye of Eternity
     AddSC_instance_eye_of_eternity();
-    AddSC_boss_sartharion();            //Obsidian Sanctum
+    AddSC_boss_sartharion();           //Obsidian Sanctum
+    AddSC_boss_shadron();
+    AddSC_boss_tenebron();
+    AddSC_boss_vesperon();
+    AddSC_obsidian_sanctum();
     AddSC_instance_obsidian_sanctum();
     AddSC_boss_bjarngrim();             //Ulduar Halls of Lightning
     AddSC_boss_loken();
