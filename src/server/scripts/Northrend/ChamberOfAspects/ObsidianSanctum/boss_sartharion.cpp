@@ -184,7 +184,7 @@ class boss_sartharion : public CreatureScript
                     DoCast(me, SPELL_WILL_OF_SARTHARION);
             }
 
-            void JustDied()
+            void JustDied(Unit* /*killer*/)
             {
                 _JustDied();
 
@@ -242,7 +242,7 @@ class boss_sartharion : public CreatureScript
                 _EnterEvadeMode();
             }
 
-            void KilledUnit()
+            void KilledUnit(Unit* /*victim*/)
             {
                 Talk(SAY_SARTHARION_SLAY);
             }
